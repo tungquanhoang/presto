@@ -11,14 +11,8 @@ const LoginScreen = () => {
 
   // Handle login logic
   const handleLogin = async () => {
-    // Show error if email or password is empty
-    if (!email || !password) {
-      setError('Please enter your email and password.');
-      return;
-    }
-
     // POST request to log the user in
-    const response = await fetch('http://localhost:' + BACKEND_PORT + '/admin/auth/login', {
+    const response = await fetch('http://localhost:' + BACKEND_PORT.BACKEND_PORT + '/admin/auth/login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -53,7 +47,7 @@ const LoginScreen = () => {
         handleLogin();
       }}
         onKeyDown={handleEnterKeyDown}>
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" required>
           <InputLabel htmlFor="email">Email</InputLabel>
           <Input
             id="email"
@@ -62,7 +56,7 @@ const LoginScreen = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" required>
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input
             id="password"
