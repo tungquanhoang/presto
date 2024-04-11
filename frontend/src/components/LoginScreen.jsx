@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Typography, Container, FormControl, Input, InputLabel } from '@material-ui/core';
 import BACKEND_PORT from '../config.json';
 
@@ -7,38 +7,34 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  // const history = useHistory();
+  const navigate = useNavigate();
 
   // Handle login logic
   const handleLogin = async () => {
-    try {
-      // Show error if email or password is empty
-      if (!email || !password) {
-        setError('Please enter your email and password.');
-        return;
-      }
+    // Show error if email or password is empty
+    if (!email || !password) {
+      setError('Please enter your email and password.');
+      return;
+    }
 
-      const response = await fetch('http://localhost:' + BACKEND_PORT + '/admin/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({ email, password })
-      })
+    // POST request to log the user in
+    const response = await fetch('http://localhost:' + BACKEND_PORT + '/admin/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({ email, password })
+    })
 
-      const data = await response.json();
-      if (data.error) {
-        // Throw an error if the request returns an error
-        throw new Error(data.error);
-      } else {
-        // Save token to localStorage for future authentication
-        localStorage.setItem('token', data.token);
-      }
-
-      // TODO: Redirect to dashboard
-      // history.push('/dashboard');
-    } catch (error) {
-      setError(error)
+    const data = await response.json();
+    if (data.error) {
+      // Set new error if the request returns an error
+      setError(data.error);
+    } else {
+      // Save token to localStorage for future authentication
+      localStorage.setItem('token', data.token);
+      // Redirect to dashboard
+      navigate('/dashboard');
     }
   };
 
