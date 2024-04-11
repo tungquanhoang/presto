@@ -1,8 +1,13 @@
 import React from 'react'
+import LogoutButton from './LogoutButton';
+import { Container } from '@material-ui/core';
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <Container maxWidth="lg">
+      <div>Dashboard</div>
+      <LogoutButton></LogoutButton>
+    </Container>
   );
 }
 
