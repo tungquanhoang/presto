@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography, Container, FormControl, Input, InputLabel } from '@material-ui/core';
+import { Button, Typography, Container, FormControl, Input, InputLabel, Link } from '@material-ui/core';
 import BACKEND_PORT from '../config.json';
 
 const LoginScreen = () => {
@@ -8,6 +8,15 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  // Check if the user already logged in/registered
+  useEffect(() => {
+    // Token available then user logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   // Handle login logic
   const handleLogin = async () => {
@@ -41,7 +50,8 @@ const LoginScreen = () => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" align="center">Login</Typography>
+      <Typography variant="h2" align="center">Presto</Typography>
+      <Typography variant="h4">Login</Typography>
       <form onSubmit={(e) => {
         e.preventDefault();
         handleLogin();
@@ -66,6 +76,9 @@ const LoginScreen = () => {
           />
         </FormControl>
         {error && <Typography variant="body2" color="error">{error}</Typography>}
+        <Typography gutterBottom>
+          Don&apos;t have an account? Register <Link href="/register">here</Link>.
+        </Typography>
         <Button type="submit" variant="contained" color="primary">
           Login
         </Button>
