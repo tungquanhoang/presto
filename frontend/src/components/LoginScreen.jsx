@@ -49,37 +49,37 @@ const LoginScreen = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h2" align="center">Presto</Typography>
-      <Typography variant="h4">Login</Typography>
+    <Container maxWidth='sm'>
+      <Typography variant='h2' align='center'>Presto</Typography>
+      <Typography variant='h4'>Login</Typography>
       <form onSubmit={(e) => {
         e.preventDefault();
         handleLogin();
       }}
         onKeyDown={handleEnterKeyDown}>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel htmlFor="email">Email</InputLabel>
+        <FormControl fullWidth margin='normal' required>
+          <InputLabel htmlFor='email'>Email</InputLabel>
           <Input
-            id="email"
-            type="email"
+            id='email'
+            type='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel htmlFor="password">Password</InputLabel>
+        <FormControl fullWidth margin='normal' required>
+          <InputLabel htmlFor='password'>Password</InputLabel>
           <Input
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
-        {error && <Typography variant="body2" color="error">{error}</Typography>}
+        {error && <Typography variant='body2' color='error'>{error}</Typography>}
         <Typography gutterBottom>
-          Don&apos;t have an account? Register <Link href="/register">here</Link>.
+          Don&apos;t have an account? Register <Link href='/register'>here</Link>.
         </Typography>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type='submit' variant='contained' color='primary'>
           Login
         </Button>
       </form>

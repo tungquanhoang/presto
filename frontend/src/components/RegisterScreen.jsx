@@ -55,54 +55,54 @@ const RegisterScreen = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h2" align="center">Presto</Typography>
-      <Typography variant="h4">Register</Typography>
+    <Container maxWidth='sm'>
+      <Typography variant='h2' align='center'>Presto</Typography>
+      <Typography variant='h4'>Register</Typography>
       <form onSubmit={(e) => {
         e.preventDefault();
         handleRegister();
       }} onKeyDown={handleEnterKeyDown}>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel htmlFor="email">Email</InputLabel>
+        <FormControl fullWidth margin='normal' required>
+          <InputLabel htmlFor='email'>Email</InputLabel>
           <Input
-            id="email"
-            type="email"
+            id='email'
+            type='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel htmlFor="password">Password</InputLabel>
+        <FormControl fullWidth margin='normal' required>
+          <InputLabel htmlFor='password'>Password</InputLabel>
           <Input
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
+        <FormControl fullWidth margin='normal' required>
+          <InputLabel htmlFor='confirmPassword'>Confirm Password</InputLabel>
           <Input
-            id="confirmPassword"
-            type="password"
+            id='confirmPassword'
+            type='password'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel htmlFor="name">Name</InputLabel>
+        <FormControl fullWidth margin='normal' required>
+          <InputLabel htmlFor='name'>Name</InputLabel>
           <Input
-            id="name"
-            type="text"
+            id='name'
+            type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </FormControl>
-        {error && <Typography variant="body2" color="error">{error}</Typography>}
+        {error && <Typography variant='body2' color='error'>{error}</Typography>}
         <Typography gutterBottom>
-          Already have an account? Log in your account <Link href="/login">here</Link>.
+          Already have an account? Log in your account <Link href='/login'>here</Link>.
         </Typography>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type='submit' variant='contained' color='primary'>
           Register
         </Button>
       </form>

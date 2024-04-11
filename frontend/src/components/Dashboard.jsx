@@ -4,7 +4,7 @@ import { Container } from '@material-ui/core';
 
 const Dashboard = () => {
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth='lg'>
       <div>Dashboard</div>
       <LogoutButton></LogoutButton>
     </Container>
