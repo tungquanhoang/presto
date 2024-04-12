@@ -1,7 +1,14 @@
 import React from 'react';
-import { Card, CardMedia, CardContent, Typography, Box } from '@material-ui/core';
+import { Card, CardMedia, CardContent, Typography, Box, CardActionArea } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
 
 const PresentationCard = ({ presentation }) => {
+  const navigate = useNavigate();
+
+  // Function to handle card click
+  const handleCardClick = () => {
+    navigate(`/presentation/${presentation.id}/edit`); // Navigate to edit page with the presentation ID
+  };
   return (
     <Card
       sx={{
@@ -12,6 +19,7 @@ const PresentationCard = ({ presentation }) => {
         boxShadow: 3,
       }}
     >
+    <CardActionArea onClick={handleCardClick}>
       {presentation.thumbnail
         ? (
           <CardMedia
@@ -47,6 +55,7 @@ const PresentationCard = ({ presentation }) => {
           Slides: {presentation.slides.length}
         </Typography>
       </CardContent>
+      </CardActionArea>
     </Card>
   );
 };
