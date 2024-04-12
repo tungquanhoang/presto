@@ -1,14 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import LogoutButton from './LogoutButton';
 import NewPresentationModal from './NewPresentationButton';
-import { Container } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
+import PresentationCard from './PresentationCard';
 import BACKEND_PORT from '../config.json';
 
 const Dashboard = () => {
+  const [presentations, setPresentations] = useState([]);
+
+  useEffect(() => {
+    const fetchPresentations = async () => {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setPresentations(data.store.presentations || []);
+      } else {
+        console.error('Failed to fetch presentations:', data.error);
+        alert('Failed to load presentations.');
+      }
+    };
+
+    fetchPresentations();
+  }, []);
+
   const navigate = useNavigate();
 
-  const handlePresentationCreate = async (presentationName) => {
+  const handlePresentationCreate = async (presentationName, description) => {
     const token = localStorage.getItem('token');
     try {
       const storeResponse = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
@@ -26,8 +49,8 @@ const Dashboard = () => {
       const newPresentation = {
         id: `presentation${presentations.length + 1}`,
         name: presentationName,
-        description: '',
-        thumbnail: '/images/default-thumbnail.jpg',
+        description,
+        thumbnail: null,
         slides: []
       };
 
@@ -48,6 +71,7 @@ const Dashboard = () => {
       }
 
       console.log('Presentation created successfully:', updateData);
+      setPresentations(presentations);
       navigate('/dashboard');
     } catch (error) {
       console.error('Error:', error);
@@ -58,6 +82,13 @@ const Dashboard = () => {
   return (
     <Container maxWidth='lg'>
       <NewPresentationModal onPresentationCreate={handlePresentationCreate} />
+      <Grid container spacing={3}>
+        {presentations.map(presentation => (
+          <Grid item key={presentation.id} xs={12} sm={6} md={4}>
+            <PresentationCard presentation={presentation} />
+          </Grid>
+        ))}
+      </Grid>
       <LogoutButton />
     </Container>
   );

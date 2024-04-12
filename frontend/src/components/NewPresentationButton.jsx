@@ -4,6 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 const NewPresentationModal = ({ onPresentationCreate }) => {
   const [open, setOpen] = useState(false);
   const [presentationName, setPresentationName] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleOpen = () => {
     setOpen(true);
@@ -14,8 +15,9 @@ const NewPresentationModal = ({ onPresentationCreate }) => {
   };
 
   const handleCreate = () => {
-    onPresentationCreate(presentationName);
+    onPresentationCreate(presentationName, description);
     setPresentationName('');
+    setDescription('');
     handleClose();
   };
 
@@ -36,6 +38,16 @@ const NewPresentationModal = ({ onPresentationCreate }) => {
             fullWidth
             value={presentationName}
             onChange={(e) => setPresentationName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            id="description"
+            label="Description"
+            type="text"
+            fullWidth
+            multiline
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
