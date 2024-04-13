@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import LogoutButton from './LogoutButton';
 import NewPresentationModal from './NewPresentationButton';
 import { Container, Grid } from '@material-ui/core';
@@ -47,7 +48,7 @@ const Dashboard = () => {
 
       const presentations = storeData.store.presentations || [];
       const newPresentation = {
-        id: `presentation${presentations.length + 1}`,
+        id: uuidv4(),
         name: presentationName,
         description,
         thumbnail: null,

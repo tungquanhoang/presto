@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Typography, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
+import PresentationSlidesPage from './PresentationSlidesPage';
 import BACKEND_PORT from '../config.json';
 
 const PresentationEditPage = () => {
@@ -163,6 +164,7 @@ const PresentationEditPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {presentation && <PresentationSlidesPage presentationId={id} />}
     </Container>
   );
 };
