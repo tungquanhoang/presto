@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Typography, Box, Container } from '@material-ui/core';
+import { Button, Typography, Box, Container, IconButton } from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useParams } from 'react-router-dom';
 import BACKEND_PORT from '../config.json';
 
 const PresentationSlidesPage = () => {
   const { id } = useParams();
   const presentationId = id;
-  console.log(presentationId)
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
@@ -136,17 +137,19 @@ const PresentationSlidesPage = () => {
       <Button onClick={handleAddSlide} variant="contained" color="primary">
         Add New Slide
       </Button>
-      <Button onClick={handleDeleteSlide} variant="contained" color="secondary">
-        Delete Slide
-      </Button>
+      {slides.length > 0 && (
+          <Button onClick={handleDeleteSlide} variant="contained" color="secondary">
+            Delete Slide
+          </Button>
+      )}
       {slides.length > 1 && (
         <>
-          <Button onClick={handlePreviousSlide} variant="contained" disabled={currentSlideIndex === 0}>
-            Previous
-          </Button>
-          <Button onClick={handleNextSlide} variant="contained" disabled={currentSlideIndex === slides.length - 1}>
-            Next
-          </Button>
+          <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
+            <ArrowBackIosIcon />
+          </IconButton>
+          <IconButton onClick={handleNextSlide} disabled={currentSlideIndex === slides.length - 1}>
+            <ArrowForwardIosIcon />
+          </IconButton>
         </>
       )}
     </Container>

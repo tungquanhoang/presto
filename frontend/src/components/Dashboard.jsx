@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import LogoutButton from './LogoutButton';
 import NewPresentationModal from './NewPresentationButton';
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, Box } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import PresentationCard from './PresentationCard';
 import BACKEND_PORT from '../config.json';
@@ -82,7 +82,10 @@ const Dashboard = () => {
 
   return (
     <Container maxWidth='lg'>
-      <NewPresentationModal onPresentationCreate={handlePresentationCreate} />
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <NewPresentationModal onPresentationCreate={handlePresentationCreate} />
+        <LogoutButton />
+      </Box>
       <Grid container spacing={3}>
         {presentations.map(presentation => (
           <Grid item key={presentation.id} xs={12} sm={6} md={4}>
@@ -90,7 +93,6 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
-      <LogoutButton />
     </Container>
   );
 }
