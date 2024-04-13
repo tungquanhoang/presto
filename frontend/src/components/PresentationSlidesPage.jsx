@@ -117,9 +117,9 @@ const PresentationSlidesPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <Typography variant="h4">Slides</Typography>
-      <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={300}>
+      <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={500} maxHeight="md" my={4} sx={{ border: '1px solid grey' }}>
         {slides.length
           ? (
             <>

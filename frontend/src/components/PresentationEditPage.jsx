@@ -106,7 +106,7 @@ const PresentationEditPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <Typography variant="h4">Edit Presentation: {presentation?.name}</Typography>
       <Button onClick={handleBack} color="primary">Back to Dashboard</Button>
       <Button onClick={handleOpenEditModal} color="primary">Edit Title and Thumbnail</Button>
