@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Typography, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
+import { Button, Typography, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import PresentationSlidesPage from './PresentationSlidesPage';
 import BACKEND_PORT from '../config.json';
+import EditTitleThumbnailModal from './EditTitleThumbnailModal';
 
 const PresentationEditPage = () => {
   const { id } = useParams();
@@ -45,26 +46,6 @@ const PresentationEditPage = () => {
 
   const handleCloseEditModal = () => {
     setOpenEditModal(false);
-  };
-
-  const handleUpdatePresentation = async () => {
-    const updatedPresentation = { ...presentation, name: newTitle, thumbnail: newThumbnail || null };
-    const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ store: { presentations: [updatedPresentation] } }) // Simplified, update your backend as needed
-    });
-
-    if (response.ok) {
-      setPresentation(updatedPresentation);
-      handleCloseEditModal();
-    } else {
-      alert('Failed to update presentation details.');
-    }
   };
 
   const handleDeletePresentation = async () => {
@@ -118,36 +99,7 @@ const PresentationEditPage = () => {
       <Button onClick={handlePresentationPreview} color="primary">Preview</Button>
       <Button onClick={() => setOpenDeleteDialog(true)} color="secondary">Delete Presentation</Button>
 
-      <Dialog open={openEditModal} onClose={handleCloseEditModal}>
-        <DialogTitle>Edit Presentation Details</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Title"
-            type="text"
-            fullWidth
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Thumbnail URL"
-            type="text"
-            fullWidth
-            value={newThumbnail}
-            onChange={(e) => setNewThumbnail(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEditModal} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpdatePresentation} color="primary">
-            Save Changes
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <EditTitleThumbnailModal openEditModal={openEditModal} handleCloseEditModal={handleCloseEditModal} presentation={presentation} setPresentation={setPresentation} newTitle={newTitle} setNewTitle={setNewTitle} newThumbnail={newThumbnail} setNewThumbnail={setNewThumbnail}></EditTitleThumbnailModal>
 
       <Dialog
         open={openDeleteDialog}
