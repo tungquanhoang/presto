@@ -60,7 +60,7 @@ const PresentationPreviewPage = () => {
   const handleRightClick = () => { };
 
   return (
-    <Box height="95vh" sx={{ overflow: 'hidden' }}>
+    <Box display="flex" alignItems="center" height="100vh">
       {loading
         ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -69,7 +69,7 @@ const PresentationPreviewPage = () => {
           )
         : (
         <>
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%" position="relative">
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight={150} height='40vw' minWidth={266} width='100%' position="relative">
             {slides[currentSlideIndex].elements.map((element, index) => (
               <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
             ))}
