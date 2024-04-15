@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Container, Button, Modal, Box, TextField, Typography, Grid, MenuItem } from '@mui/material';
+import { Container, Button, Modal, TextField, Typography, MenuItem, Stack } from '@mui/material';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ImageIcon from '@mui/icons-material/Image';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CodeIcon from '@mui/icons-material/Code';
 import { v4 as uuidv4 } from 'uuid';
+import { Grid } from '@material-ui/core';
 
 const modalStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -95,63 +95,69 @@ const SlideEditor = ({ addElementToSlide }) => {
 
   return (
     <Container maxWidth="xl">
-      <Button startIcon={<TextFieldsIcon />} onClick={() => handleOpen('text')}>Add Text</Button>
-      <Button startIcon={<ImageIcon />} onClick={() => handleOpen('image')}>Add Image</Button>
-      <Button startIcon={<OndemandVideoIcon />} onClick={() => handleOpen('video')}>Add Video</Button>
-      <Button startIcon={<CodeIcon />} onClick={() => handleOpen('code')}>Add Code</Button>
+      <Grid container justifyContent='left' alignContent='center' spacing={2}>
+        <Grid item xs='6' sm='auto'>
+          <Button startIcon={<TextFieldsIcon />} onClick={() => handleOpen('text')}>Add Text</Button>
+        </Grid>
+        <Grid item xs='6' sm='auto'>
+          <Button startIcon={<ImageIcon />} onClick={() => handleOpen('image')}>Add Image</Button>
+        </Grid>
+        <Grid item xs='6' sm='auto'>
+          <Button startIcon={<OndemandVideoIcon />} onClick={() => handleOpen('video')}>Add Video</Button>
+        </Grid>
+        <Grid item xs='6' sm='auto'>
+          <Button startIcon={<CodeIcon />} onClick={() => handleOpen('code')}>Add Code</Button>
+        </Grid>
+      </Grid>
 
       <Modal open={open} onClose={handleClose}>
-        <Box sx={modalStyle}>
-          <Typography variant="h6" component="h2">{`Add ${elementType}`}</Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField fullWidth label="Width (%)" name="sizeWidth" value={elementProps.sizeWidth} onChange={handleChange} />
-              <TextField fullWidth label="Height (%)" name="sizeHeight" value={elementProps.sizeHeight} onChange={handleChange} />
-              {elementType === 'text' && (
-                <>
-                  <TextField fullWidth multiline maxRows={4} label="Text" name="content" value={elementProps.content} onChange={handleChange} />
-                  <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
-                  <TextField fullWidth type="color" label="Color" name="color" value={elementProps.color} onChange={handleChange} />
-                </>
-              )}
-              {elementType === 'image' && (
-                <>
-                  <TextField fullWidth label="Image URL" name="imageUrl" value={elementProps.imageUrl} onChange={handleChange} />
-                  <TextField fullWidth label="Alt Text" name="imageAlt" value={elementProps.imageAlt} onChange={handleChange} />
-                </>
-              )}
-              {elementType === 'video' && (
-                <>
-                  <TextField fullWidth label="Video URL" name="videoUrl" value={elementProps.videoUrl} onChange={handleChange} />
-                  <TextField fullWidth select SelectProps={{ native: true }} label="Autoplay" name="autoplay" value={elementProps.autoplay} onChange={handleChange}>
-                    <option value={false}>No</option>
-                    <option value={true}>Yes</option>
-                  </TextField>
-                </>
-              )}
-              {elementType === 'code' && (
-                <>
-                  <TextField
-                    select
-                    label="Language"
-                    value={programmingLanguage}
-                    onChange={e => setProgrammingLanguage(e.target.value)}
-                    fullWidth
-                  >
-                  <MenuItem value="javascript">JavaScript</MenuItem>
-                  <MenuItem value="python">Python</MenuItem>
-                  <MenuItem value="c">C</MenuItem>
-                  </TextField>
-                  <TextField fullWidth multiline maxRows={10} label="Code" name="content" value={elementProps.content} onChange={handleChange} />
-                  <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
-                </>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <Button onClick={addElement} variant="contained">Add to Slide</Button>
-            </Grid>
-          </Grid>
-        </Box>
+        <Container maxWidth='xs' sx={modalStyle}>
+          <Stack spacing={3}>
+            <Typography variant="h6" component="h2">{`Add ${elementType}`}</Typography>
+            <TextField fullWidth label="Width (%)" name="sizeWidth" value={elementProps.sizeWidth} onChange={handleChange} />
+            <TextField fullWidth label="Height (%)" name="sizeHeight" value={elementProps.sizeHeight} onChange={handleChange} />
+            {elementType === 'text' && (
+              <>
+                <TextField fullWidth multiline maxRows={4} label="Text" name="content" value={elementProps.content} onChange={handleChange} />
+                <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
+                <TextField fullWidth type="color" label="Color" name="color" value={elementProps.color} onChange={handleChange} />
+              </>
+            )}
+            {elementType === 'image' && (
+              <>
+                <TextField fullWidth label="Image URL" name="imageUrl" value={elementProps.imageUrl} onChange={handleChange} />
+                <TextField fullWidth label="Alt Text" name="imageAlt" value={elementProps.imageAlt} onChange={handleChange} />
+              </>
+            )}
+            {elementType === 'video' && (
+              <>
+                <TextField fullWidth label="Video URL" name="videoUrl" value={elementProps.videoUrl} onChange={handleChange} />
+                <TextField fullWidth select SelectProps={{ native: true }} label="Autoplay" name="autoplay" value={elementProps.autoplay} onChange={handleChange}>
+                  <option value={false}>No</option>
+                  <option value={true}>Yes</option>
+                </TextField>
+              </>
+            )}
+            {elementType === 'code' && (
+              <>
+                <TextField
+                  select
+                  label="Language"
+                  value={programmingLanguage}
+                  onChange={e => setProgrammingLanguage(e.target.value)}
+                  fullWidth
+                >
+                <MenuItem value="javascript">JavaScript</MenuItem>
+                <MenuItem value="python">Python</MenuItem>
+                <MenuItem value="c">C</MenuItem>
+                </TextField>
+                <TextField fullWidth multiline maxRows={10} label="Code" name="content" value={elementProps.content} onChange={handleChange} />
+                <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
+              </>
+            )}
+            <Button onClick={addElement} variant="contained">Add to Slide</Button>
+          </Stack>
+        </Container>
       </Modal>
     </Container>
   );
