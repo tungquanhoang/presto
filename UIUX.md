@@ -1,0 +1,1 @@
+- Add a circular progress/loading state to PresentationPreviewPage.jsx that indicates that the preview page is fetching the slide.

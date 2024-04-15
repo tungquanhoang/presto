@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useParams } from 'react-router-dom';
 import SlideEditor from './SlideEditor';
 import BACKEND_PORT from '../config.json';
+import PresentationSlideElement from './PresentationSlideElement';
 
 const PresentationSlidesPage = () => {
   const { id } = useParams();
@@ -121,23 +122,6 @@ const PresentationSlidesPage = () => {
     }
   };
 
-  const addElementToSlide = (element) => {
-    const updatedSlides = slides.map((slide, index) => {
-      if (index === currentSlideIndex) {
-        return { ...slide, elements: [...slide.elements, element] }; // assuming each slide has an 'elements' array
-      }
-      return slide;
-    });
-
-    updateSlidesInStore(updatedSlides).then(success => {
-      if (success) {
-        setSlides(updatedSlides);
-      } else {
-        alert('Failed to update slide with new element');
-      }
-    });
-  };
-
   const handleRightClick = (event, element) => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
@@ -202,60 +186,13 @@ const PresentationSlidesPage = () => {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Slides</Typography>
-      <SlideEditor addElementToSlide={addElementToSlide} />
+      <SlideEditor slides={slides} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} />
       <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={500} maxHeight="md" my={4} sx={{ border: '1px solid grey' }}>
         {slides.length
           ? (
             <>
               {slides[currentSlideIndex].elements.map((element, index) => (
-                <Box key={index} sx={{
-                  position: 'absolute',
-                  left: `${element.positionX}%`,
-                  top: `${element.positionY}%`,
-                  width: `${element.sizeWidth}%`,
-                  height: `${element.sizeHeight}%`,
-                  border: '1px solid grey',
-                  overflow: 'hidden',
-                  zIndex: index, // Ensures that elements later in the array are rendered on top
-                }}
-                  onDoubleClick={() => handleDoubleClick(element)}
-                  onContextMenu={(event) => handleRightClick(event, element)}
-                >
-                  {element.type === 'text' && (
-                    <Typography style={{
-                      fontSize: `${element.fontSize}em`,
-                      color: element.color,
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden', // Prevents text from overflowing the container
-                    }}>
-                      {element.content}
-                    </Typography>
-                  )}
-                  {element.type === 'image' && (
-                    <img src={element.imageUrl} alt={element.imageAlt} style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover' // Adjusts the image size to cover the element area, you can change it to 'contain' if you need to see the whole image
-                    }} />
-                  )}
-                  {element.type === 'video' && (
-                    <iframe src={`${element.videoUrl}&autoplay=${element.autoplay ? '1' : '0'}&mute=1`} allow='autoplay' width='100%' height='100%' allowFullScreen />
-                  )}
-                  {element.type === 'code' && (
-                    <pre style={{
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'auto', // Allows scrolling inside the pre element if the content overflows
-                      backgroundColor: '#f4f4f4', // Gives a light background color for better readability
-                      padding: '10px', // Adds some padding inside the pre element
-                      margin: 0, // Removes default margin to fit better within the box
-                      whiteSpace: 'pre-wrap'
-                    }}>
-                      {element.content}
-                    </pre>
-                  )}
-                </Box>
+                <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
               ))}
               <Menu
                 open={Boolean(anchorEl)}
@@ -301,19 +238,19 @@ const PresentationSlidesPage = () => {
             )}
       </Box>
       <Grid container spacing={2}>
-        <Grid item sm='2'>
+        <Grid item sm={2}>
           <Button onClick={handleAddSlide} variant="contained" color="primary">
             Add New Slide
           </Button>
         </Grid>
-        <Grid item sm='2'>
+        <Grid item sm={2}>
           {slides.length > 0 && (
             <Button onClick={handleDeleteSlide} variant="contained" color="secondary">
               Delete Slide
             </Button>
           )}
         </Grid>
-        <Grid item sm='8' align='right'>
+        <Grid item sm={8} align='right'>
           {slides.length > 1 && (
             <>
               <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>

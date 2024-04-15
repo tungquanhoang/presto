@@ -2,15 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Typography, IconButton, Box, Grid } from '@material-ui/core';
+import { Typography, IconButton, Box, Grid, CircularProgress } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import BACKEND_PORT from '../config.json';
+import PresentationSlideElement from './PresentationSlideElement';
 
 const PresentationPreviewPage = () => {
   const { id } = useParams();
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
 
   useEffect(() => {
     fetchSlides();
@@ -30,6 +32,7 @@ const PresentationPreviewPage = () => {
         if (presentation && presentation.slides) {
           setSlides(presentation.slides);
           setCurrentSlideIndex(0);
+          setLoading(false);
         }
       } else {
         console.error('Failed to fetch slides');
@@ -51,35 +54,46 @@ const PresentationPreviewPage = () => {
     }
   };
 
+  /* Placeholder fucntions so that double-clicking and right-clicking behaviors do not trigger */
+  const handleDoubleClick = () => { };
+
+  const handleRightClick = () => { };
+
   return (
-    <Container maxWidth="lg">
-      <Box display="flex" justifyContent="center" alignItems="center" height={500} my={4}>
-        {slides.length
-          ? (
-            <>
-              <Typography variant="h4">{slides[currentSlideIndex]?.content}</Typography>
-            </>
-            )
-          : (
-            <Typography>No slides to display.</Typography>
-            )}
-      </Box>
-      <Grid container justifyContent='center' spacing={2}>
-        <Grid item xs='auto'>
-          <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
-            <ArrowBackIosIcon />
-          </IconButton>
-        </Grid>
-        <Grid item xs={10}>
-          <Typography variant='h4' align='center'>{currentSlideIndex + 1}</Typography>
-        </Grid>
-        <Grid item xs='auto'>
-          <IconButton onClick={handleNextSlide} disabled={currentSlideIndex === slides.length - 1}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Container>
+    <Box height="95vh" sx={{ overflow: 'hidden' }}>
+      {loading
+        ? (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+            <CircularProgress />
+          </Box>
+          )
+        : (
+        <>
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%" position="relative">
+            {slides[currentSlideIndex].elements.map((element, index) => (
+              <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
+            ))}
+          </Box>
+          <Box position="absolute" bottom={20} left={0} right={0}>
+            <Grid container display='flex' justifyContent='center' spacing={2}>
+              <Grid item xs={'auto'}>
+                <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
+                  <ArrowBackIosIcon />
+                </IconButton>
+              </Grid>
+              <Grid item xs={2}>
+                <Typography variant='h4' align='center'>{currentSlideIndex + 1}</Typography>
+              </Grid>
+              <Grid item xs={'auto'}>
+                <IconButton onClick={handleNextSlide} disabled={currentSlideIndex === slides.length - 1}>
+                  <ArrowForwardIosIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Box>
+        </>
+          )}
+    </Box>
   );
 };
 

@@ -18,7 +18,7 @@ const modalStyle = {
   p: 4,
 };
 
-const SlideEditor = ({ addElementToSlide }) => {
+const SlideEditor = ({ slides, currentSlideIndex, updateSlidesInStore, setSlides }) => {
   const [open, setOpen] = useState(false);
   const [elementType, setElementType] = useState('');
   const [programmingLanguage, setProgrammingLanguage] = useState('javascript'); // Additional state for programming language
@@ -38,6 +38,23 @@ const SlideEditor = ({ addElementToSlide }) => {
     positionY: '0',
     programmingLanguage: '',
   });
+
+  const addElementToSlide = (element) => {
+    const updatedSlides = slides.map((slide, index) => {
+      if (index === currentSlideIndex) {
+        return { ...slide, elements: [...slide.elements, element] }; // assuming each slide has an 'elements' array
+      }
+      return slide;
+    });
+
+    updateSlidesInStore(updatedSlides).then(success => {
+      if (success) {
+        setSlides(updatedSlides);
+      } else {
+        alert('Failed to update slide with new element');
+      }
+    });
+  };
 
   const handleOpen = (type) => {
     setElementType(type);
@@ -95,17 +112,17 @@ const SlideEditor = ({ addElementToSlide }) => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container justifyContent='left' alignContent='center' spacing={2}>
-        <Grid item xs='6' sm='auto'>
+      <Grid container justifyContent='flex-start' alignContent='center' spacing={2}>
+        <Grid item xs={6} sm='auto'>
           <Button startIcon={<TextFieldsIcon />} onClick={() => handleOpen('text')}>Add Text</Button>
         </Grid>
-        <Grid item xs='6' sm='auto'>
+        <Grid item xs={6} sm='auto'>
           <Button startIcon={<ImageIcon />} onClick={() => handleOpen('image')}>Add Image</Button>
         </Grid>
-        <Grid item xs='6' sm='auto'>
+        <Grid item xs={6} sm='auto'>
           <Button startIcon={<OndemandVideoIcon />} onClick={() => handleOpen('video')}>Add Video</Button>
         </Grid>
-        <Grid item xs='6' sm='auto'>
+        <Grid item xs={6} sm='auto'>
           <Button startIcon={<CodeIcon />} onClick={() => handleOpen('code')}>Add Code</Button>
         </Grid>
       </Grid>
