@@ -57,7 +57,7 @@ const RegisterScreen = () => {
   return (
     <Container maxWidth='sm'>
       <Typography variant='h2' align='center'>Presto</Typography>
-      <Typography variant='h4'>Register</Typography>
+      <Typography variant='h4' align='center'>Register</Typography>
       <form onSubmit={(e) => {
         e.preventDefault();
         handleRegister();

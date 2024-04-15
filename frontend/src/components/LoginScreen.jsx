@@ -51,7 +51,7 @@ const LoginScreen = () => {
   return (
     <Container maxWidth='sm'>
       <Typography variant='h2' align='center'>Presto</Typography>
-      <Typography variant='h4'>Login</Typography>
+      <Typography variant='h4' align='center'>Login</Typography>
       <form onSubmit={(e) => {
         e.preventDefault();
         handleLogin();
