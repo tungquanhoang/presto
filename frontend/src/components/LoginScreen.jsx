@@ -21,7 +21,7 @@ const LoginScreen = () => {
   // Handle login logic
   const handleLogin = async () => {
     // POST request to log the user in
-    const response = await fetch('http://localhost:' + BACKEND_PORT.BACKEND_PORT + '/admin/auth/login', {
+    const response = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/login`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

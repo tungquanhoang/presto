@@ -29,7 +29,7 @@ const RegisterScreen = () => {
     }
 
     // POST request to register user
-    const response = await fetch('http://localhost:' + BACKEND_PORT.BACKEND_PORT + '/admin/auth/register', {
+    const response = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
