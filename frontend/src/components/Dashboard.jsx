@@ -52,7 +52,13 @@ const Dashboard = () => {
         name: presentationName,
         description,
         thumbnail: null,
-        slides: []
+        slides: [
+          {
+            // Blank first slide
+            id: uuidv4(),
+            elements: []
+          }
+        ]
       };
 
       presentations.push(newPresentation);
