@@ -105,11 +105,17 @@ const PresentationEditPage = () => {
     }
   };
 
+  // Open the preview of the presentation in a new tab
+  const handlePresentationPreview = () => {
+    window.open(`/presentation/${presentation.id}/preview`, '_blank');
+  };
+
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Edit Presentation: {presentation?.name}</Typography>
       <Button onClick={handleBack} color="primary">Back to Dashboard</Button>
       <Button onClick={handleOpenEditModal} color="primary">Edit Title and Thumbnail</Button>
+      <Button onClick={handlePresentationPreview} color="primary">Preview</Button>
       <Button onClick={() => setOpenDeleteDialog(true)} color="secondary">Delete Presentation</Button>
 
       <Dialog open={openEditModal} onClose={handleCloseEditModal}>

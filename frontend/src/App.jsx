@@ -4,6 +4,7 @@ import LoginScreen from './components/LoginScreen';
 import RegisterScreen from './components/RegisterScreen';
 import PresentationEditPage from './components/PresentationEditPage';
 import Dashboard from './components/Dashboard';
+import PresentationPreviewPage from './components/PresentationPreviewPage';
 
 function App () {
   return (
@@ -14,6 +15,7 @@ function App () {
         <Route exact path="/register" element={<RegisterScreen />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
         <Route path="/presentation/:id/edit" element={<PresentationEditPage />} />
+        <Route path="/presentation/:id/preview" element={<PresentationPreviewPage />} />
       </Routes>
     </Router>
   );

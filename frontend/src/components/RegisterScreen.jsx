@@ -29,7 +29,7 @@ const RegisterScreen = () => {
     }
 
     // POST request to register user
-    const response = await fetch('http://localhost:' + BACKEND_PORT.BACKEND_PORT + '/admin/auth/register', {
+    const response = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/admin/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const RegisterScreen = () => {
   return (
     <Container maxWidth='sm'>
       <Typography variant='h2' align='center'>Presto</Typography>
-      <Typography variant='h4'>Register</Typography>
+      <Typography variant='h4' align='center'>Register</Typography>
       <form onSubmit={(e) => {
         e.preventDefault();
         handleRegister();
