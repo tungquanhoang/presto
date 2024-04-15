@@ -171,13 +171,24 @@ const PresentationSlidesPage = () => {
 
   const handleSaveChanges = () => {
     const updatedElements = slides[currentSlideIndex].elements.map(el =>
-      el.id === editingElement.id ? editingElement : el
+      el.id === editingElement.id ? { ...el, ...editingElement } : el
     );
     const updatedSlides = slides.map((slide, idx) =>
       idx === currentSlideIndex ? { ...slide, elements: updatedElements } : slide
     );
-    setSlides(updatedSlides);
-    setEditModalOpen(false);
+
+    // Log data to see what is being sent to the server
+    console.log('Updated slides data', updatedSlides);
+
+    updateSlidesInStore(updatedSlides).then(success => {
+      if (success) {
+        setSlides(updatedSlides); // Update local state if the server update was successful
+        console.log('Update successful');
+      } else {
+        console.error('Failed to update slides on server');
+      }
+      setEditModalOpen(false); // Close the modal in any case
+    });
   };
 
   return (
