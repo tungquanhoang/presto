@@ -187,7 +187,7 @@ const PresentationSlidesPage = () => {
     <Container maxWidth="lg">
       <Typography variant="h4">Slides</Typography>
       <SlideEditor slides={slides} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} />
-      <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={500} maxHeight="md" my={4} sx={{ border: '1px solid grey' }}>
+      <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
         {slides.length
           ? (
             <>
