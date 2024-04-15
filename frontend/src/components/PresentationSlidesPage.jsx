@@ -232,10 +232,7 @@ const PresentationSlidesPage = () => {
                     }} />
                     )}
                     {element.type === 'video' && (
-                    <video src={element.videoUrl} autoPlay={element.autoplay} controls style={{
-                      width: '100%',
-                      height: '100%'
-                    }} />
+                    <iframe src={element.videoUrl} autoPlay={element.autoplay} width='100%' height='100%'/>
                     )}
                     {element.type === 'code' && (
                     <pre style={{
