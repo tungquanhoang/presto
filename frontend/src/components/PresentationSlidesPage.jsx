@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField } from '@material-ui/core';
+import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useParams } from 'react-router-dom';
@@ -207,7 +207,7 @@ const PresentationSlidesPage = () => {
         {slides.length
           ? (
             <>
-                {slides[currentSlideIndex].elements.map((element, index) => (
+              {slides[currentSlideIndex].elements.map((element, index) => (
                 <Box key={index} sx={{
                   position: 'absolute',
                   left: `${element.positionX}%`,
@@ -218,10 +218,10 @@ const PresentationSlidesPage = () => {
                   overflow: 'hidden',
                   zIndex: index, // Ensures that elements later in the array are rendered on top
                 }}
-                onDoubleClick={() => handleDoubleClick(element)}
-                onContextMenu={(event) => handleRightClick(event, element)}
+                  onDoubleClick={() => handleDoubleClick(element)}
+                  onContextMenu={(event) => handleRightClick(event, element)}
                 >
-                    {element.type === 'text' && (
+                  {element.type === 'text' && (
                     <Typography style={{
                       fontSize: `${element.fontSize}em`,
                       color: element.color,
@@ -229,20 +229,20 @@ const PresentationSlidesPage = () => {
                       height: '100%',
                       overflow: 'hidden', // Prevents text from overflowing the container
                     }}>
-                        {element.content}
+                      {element.content}
                     </Typography>
-                    )}
-                    {element.type === 'image' && (
+                  )}
+                  {element.type === 'image' && (
                     <img src={element.imageUrl} alt={element.imageAlt} style={{
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover' // Adjusts the image size to cover the element area, you can change it to 'contain' if you need to see the whole image
                     }} />
-                    )}
-                    {element.type === 'video' && (
-                      <iframe src={`${element.videoUrl}&autoplay=${element.autoplay ? '1' : '0'}&mute=1`} allow='autoplay' width='100%' height='100%' allowFullScreen />
-                    )}
-                    {element.type === 'code' && (
+                  )}
+                  {element.type === 'video' && (
+                    <iframe src={`${element.videoUrl}&autoplay=${element.autoplay ? '1' : '0'}&mute=1`} allow='autoplay' width='100%' height='100%' allowFullScreen />
+                  )}
+                  {element.type === 'code' && (
                     <pre style={{
                       width: '100%',
                       height: '100%',
@@ -252,72 +252,80 @@ const PresentationSlidesPage = () => {
                       margin: 0, // Removes default margin to fit better within the box
                       whiteSpace: 'pre-wrap'
                     }}>
-                        {element.content}
+                      {element.content}
                     </pre>
-                    )}
+                  )}
                 </Box>
-                ))}
-                <Menu
+              ))}
+              <Menu
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 onClose={handleCloseMenu}
-                >
+              >
                 <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
-                </Menu>
-                <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+              </Menu>
+              <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
                 <Box p={2}>
-                <TextField
+                  <TextField
                     fullWidth
                     label="Content"
                     value={editingElement?.content || ''}
                     onChange={(e) => handleChange('content', e.target.value)}
-                />
-                <TextField
+                  />
+                  <TextField
                     fullWidth
                     label="X Position (%)"
                     type="number"
                     value={editingElement?.positionX || ''}
                     onChange={(e) => handleChange('positionX', e.target.value)}
-                />
-                <TextField
+                  />
+                  <TextField
                     fullWidth
                     label="Y Position (%)"
                     type="number"
                     value={editingElement?.positionY || ''}
                     onChange={(e) => handleChange('positionY', e.target.value)}
-                />
-                <Button onClick={handleSaveChanges} color="primary">
+                  />
+                  <Button onClick={handleSaveChanges} color="primary">
                     Save Changes
-                </Button>
+                  </Button>
                 </Box>
-            </Dialog>
-                <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
+              </Dialog>
+              <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
                 <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
-                </Box>
+              </Box>
             </>
             )
           : (
-          <Typography>No slides to display. Add a new slide.</Typography>
+            <Typography>No slides to display. Add a new slide.</Typography>
             )}
       </Box>
-      <Button onClick={handleAddSlide} variant="contained" color="primary">
-        Add New Slide
-      </Button>
-      {slides.length > 0 && (
-          <Button onClick={handleDeleteSlide} variant="contained" color="secondary">
-            Delete Slide
+      <Grid container spacing={2}>
+        <Grid item sm='2'>
+          <Button onClick={handleAddSlide} variant="contained" color="primary">
+            Add New Slide
           </Button>
-      )}
-      {slides.length > 1 && (
-        <>
-          <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
-            <ArrowBackIosIcon />
-          </IconButton>
-          <IconButton onClick={handleNextSlide} disabled={currentSlideIndex === slides.length - 1}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </>
-      )}
+        </Grid>
+        <Grid item sm='2'>
+          {slides.length > 0 && (
+            <Button onClick={handleDeleteSlide} variant="contained" color="secondary">
+              Delete Slide
+            </Button>
+          )}
+        </Grid>
+        <Grid item sm='8' align='right'>
+          {slides.length > 1 && (
+            <>
+              <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
+                <ArrowBackIosIcon />
+              </IconButton>
+              <IconButton onClick={handleNextSlide} disabled={currentSlideIndex === slides.length - 1}>
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </>
+          )}
+        </Grid>
+      </Grid>
     </Container>
   );
 };
