@@ -158,6 +158,14 @@ const PresentationSlidesPage = () => {
     });
     setSlides(updatedSlides);
     handleCloseMenu();
+
+    updateSlidesInStore(updatedSlides).then(success => {
+      if (success) {
+        console.log('Slides updated successfully');
+      } else {
+        console.error('Failed to update slides');
+      }
+    });
   };
 
   const handleDoubleClick = (element) => {
@@ -232,7 +240,7 @@ const PresentationSlidesPage = () => {
                     }} />
                     )}
                     {element.type === 'video' && (
-                    <iframe src={element.videoUrl} autoPlay={element.autoplay} width='100%' height='100%'/>
+                      <iframe src={`${element.videoUrl}&autoplay=${element.autoplay ? '1' : '0'}&mute=1`} allow='autoplay' width='100%' height='100%' allowFullScreen />
                     )}
                     {element.type === 'code' && (
                     <pre style={{
