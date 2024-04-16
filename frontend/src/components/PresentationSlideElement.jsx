@@ -1,7 +1,46 @@
 import { Box, Typography } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 
 const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRightClick }) => {
+  const [isClicked, setIsClicked] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
+
+  const handleMouseDown = (event, corner) => {
+    event.stopPropagation();
+    setIsClicked(true);
+    setIsDragging(true);
+    setStartX(event.clientX);
+    setStartY(event.clientY);
+  };
+
+  const handleMouseMove = (event) => {
+    if (isDragging) {
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      const newX = element.positionX + (dx / window.innerWidth) * 100;
+      const newY = element.positionY + (dy / window.innerHeight) * 100;
+      // Ensure the new position does not exceed the slide boundaries
+      const newPositionX = Math.max(0, Math.min(newX, 100 - element.sizeWidth));
+      const newPositionY = Math.max(0, Math.min(newY, 100 - element.sizeHeight));
+      element.positionX = newPositionX;
+      element.positionY = newPositionY;
+      setStartX(event.clientX);
+      setStartY(event.clientY);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDragging) {
+      setIsClicked(false);
+    }
+  };
+
   return (
     <Box key={index} sx={{
       position: 'absolute',
@@ -13,6 +52,10 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
       overflow: 'hidden',
       zIndex: index, // Ensures that elements later in the array are rendered on top
     }}
+      onMouseDown={(event) => handleMouseDown(event, 'top-left')}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
       onDoubleClick={() => handleDoubleClick(element)}
       onContextMenu={(event) => handleRightClick(event, element)}
     >
@@ -50,6 +93,27 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
           {element.content}
         </pre>
       )}
+      {isClicked &&
+        [...Array(4)].map((_, cornerIndex) => (
+          <div
+            key={cornerIndex}
+            style={{
+              position: 'absolute',
+              width: '5px',
+              height: '5px',
+              backgroundColor: 'black',
+              cursor: 'pointer',
+              zIndex: 9999,
+              ...(cornerIndex === 0
+                ? { top: '-2px', left: '-2px' }
+                : cornerIndex === 1
+                  ? { top: '-2px', right: '-2px' }
+                  : cornerIndex === 2
+                    ? { bottom: '-2px', left: '-2px' }
+                    : { bottom: '-2px', right: '-2px' }),
+            }}
+          />
+        ))}
     </Box>
   )
 }

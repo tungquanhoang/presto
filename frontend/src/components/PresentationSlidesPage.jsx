@@ -227,20 +227,6 @@ const PresentationSlidesPage = () => {
                       value={editingElement?.content || ''}
                       onChange={(e) => handleChange('content', e.target.value)}
                     />
-                    <TextField
-                      fullWidth
-                      label="X Position (%)"
-                      type="number"
-                      value={editingElement?.positionX || ''}
-                      onChange={(e) => handleChange('positionX', e.target.value)}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Y Position (%)"
-                      type="number"
-                      value={editingElement?.positionY || ''}
-                      onChange={(e) => handleChange('positionY', e.target.value)}
-                    />
                     <Button onClick={handleSaveChanges} color="primary">
                       Save Changes
                     </Button>
