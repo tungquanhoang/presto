@@ -1,11 +1,11 @@
 import { Box, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 
-const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRightClick }) => {
+const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRightClick, handleSaveChanges }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
+  const [startX, setStartX] = useState(element.positionX);
+  const [startY, setStartY] = useState(element.positionY);
 
   const handleMouseDown = (event, corner) => {
     event.stopPropagation();
@@ -33,6 +33,7 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    handleSaveChanges(element);
   };
 
   const handleMouseLeave = () => {

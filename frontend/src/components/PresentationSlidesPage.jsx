@@ -175,9 +175,9 @@ const PresentationSlidesPage = () => {
     setEditingElement(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = (element) => {
     const updatedElements = slides[currentSlideIndex].elements.map(el =>
-      el.id === editingElement.id ? { ...el, ...editingElement } : el
+      el.id === element.id ? { ...el, ...element } : el
     );
     const updatedSlides = slides.map((slide, idx) =>
       idx === currentSlideIndex ? { ...slide, elements: updatedElements } : slide
@@ -210,7 +210,7 @@ const PresentationSlidesPage = () => {
           : (
               <Box style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
                 {slides[currentSlideIndex].elements.map((element, index) => (
-                  <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
+                  <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges}></PresentationSlideElement>
                 ))}
                 <Menu
                   open={Boolean(anchorEl)}
@@ -227,7 +227,21 @@ const PresentationSlidesPage = () => {
                       value={editingElement?.content || ''}
                       onChange={(e) => handleChange('content', e.target.value)}
                     />
-                    <Button onClick={handleSaveChanges} color="primary">
+                    <TextField
+                      fullWidth
+                      label="X Position (%)"
+                      type="number"
+                      value={editingElement?.positionX || ''}
+                      onChange={(e) => handleChange('positionX', e.target.value)}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Y Position (%)"
+                      type="number"
+                      value={editingElement?.positionY || ''}
+                      onChange={(e) => handleChange('positionY', e.target.value)}
+                    />
+                    <Button onClick={() => handleSaveChanges(editingElement)} color="primary">
                       Save Changes
                     </Button>
                   </Box>
