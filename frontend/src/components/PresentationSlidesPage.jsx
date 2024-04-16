@@ -202,9 +202,7 @@ const PresentationSlidesPage = () => {
         <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
             {loading
               ? (
-                  <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
-                    <CircularProgress />
-                  </Box>
+                  <CircularProgress />
                 )
               : (
                   <>
