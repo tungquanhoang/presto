@@ -1,7 +1,7 @@
 // PresentationPreviewPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Typography, IconButton, Box, Grid, CircularProgress } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -10,13 +10,25 @@ import PresentationSlideElement from './PresentationSlideElement';
 
 const PresentationPreviewPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
 
+  // Fetch initial slide data
   useEffect(() => {
     fetchSlides();
+    const urlParams = new URLSearchParams(window.location.search);
+    const slideNumber = urlParams.get('slide');
+    if (slideNumber) {
+      setCurrentSlideIndex(parseInt(slideNumber, 10) - 1);
+    }
   }, []);
+
+  // Update URL based on slide number
+  useEffect(() => {
+    navigate(`/presentation/${id}/preview?slide=${currentSlideIndex + 1}`);
+  }, [currentSlideIndex, navigate, id]);
 
   const fetchSlides = async () => {
     try {
@@ -31,7 +43,6 @@ const PresentationPreviewPage = () => {
         const presentation = data.store.presentations.find(p => p.id === id);
         if (presentation && presentation.slides) {
           setSlides(presentation.slides);
-          setCurrentSlideIndex(0);
           setLoading(false);
         }
       } else {

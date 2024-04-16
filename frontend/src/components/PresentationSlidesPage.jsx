@@ -1,26 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid } from '@material-ui/core';
+import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SlideEditor from './SlideEditor';
 import BACKEND_PORT from '../config.json';
 import PresentationSlideElement from './PresentationSlideElement';
 
 const PresentationSlidesPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const presentationId = id;
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null); // For context menu
   const [editModalOpen, setEditModalOpen] = useState(false); // For edit modal
   const [editingElement, setEditingElement] = useState(null);
+  const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
 
   // Fetch initial slide data
   useEffect(() => {
     fetchSlides();
+    const urlParams = new URLSearchParams(window.location.search);
+    const slideNumber = urlParams.get('slide');
+    if (slideNumber) {
+      setCurrentSlideIndex(parseInt(slideNumber, 10) - 1);
+    }
   }, []);
+
+  // Update URL based on slide number
+  useEffect(() => {
+    navigate(`/presentation/${presentationId}/edit?slide=${currentSlideIndex + 1}`);
+  }, [currentSlideIndex, navigate, presentationId]);
 
   const fetchSlides = async () => {
     const token = localStorage.getItem('token');
@@ -34,8 +46,8 @@ const PresentationSlidesPage = () => {
       const presentation = data.store.presentations.find(p => p.id === presentationId);
       if (presentation && presentation.slides) {
         setSlides(presentation.slides);
-        setCurrentSlideIndex(0); // Start from the first slide
       }
+      setLoading(false);
     } else {
       console.error('Failed to fetch slides');
     }
@@ -187,56 +199,59 @@ const PresentationSlidesPage = () => {
     <Container maxWidth="lg">
       <Typography variant="h4">Slides</Typography>
       <SlideEditor slides={slides} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} />
-      <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
-        {slides.length
-          ? (
-            <>
-              {slides[currentSlideIndex].elements.map((element, index) => (
-                <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
-              ))}
-              <Menu
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleCloseMenu}
-              >
-                <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
-              </Menu>
-              <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
-                <Box p={2}>
-                  <TextField
-                    fullWidth
-                    label="Content"
-                    value={editingElement?.content || ''}
-                    onChange={(e) => handleChange('content', e.target.value)}
-                  />
-                  <TextField
-                    fullWidth
-                    label="X Position (%)"
-                    type="number"
-                    value={editingElement?.positionX || ''}
-                    onChange={(e) => handleChange('positionX', e.target.value)}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Y Position (%)"
-                    type="number"
-                    value={editingElement?.positionY || ''}
-                    onChange={(e) => handleChange('positionY', e.target.value)}
-                  />
-                  <Button onClick={handleSaveChanges} color="primary">
-                    Save Changes
-                  </Button>
-                </Box>
-              </Dialog>
-              <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
-                <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
-              </Box>
-            </>
-            )
-          : (
-            <Typography>No slides to display. Add a new slide.</Typography>
-            )}
-      </Box>
+        <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+            {loading
+              ? (
+                  <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+                    <CircularProgress />
+                  </Box>
+                )
+              : (
+                  <>
+                    {slides[currentSlideIndex].elements.map((element, index) => (
+                      <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
+                    ))}
+                    <Menu
+                      open={Boolean(anchorEl)}
+                      anchorEl={anchorEl}
+                      onClose={handleCloseMenu}
+                    >
+                      <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
+                    </Menu>
+                    <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+                      <Box p={2}>
+                        <TextField
+                          fullWidth
+                          label="Content"
+                          value={editingElement?.content || ''}
+                          onChange={(e) => handleChange('content', e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          label="X Position (%)"
+                          type="number"
+                          value={editingElement?.positionX || ''}
+                          onChange={(e) => handleChange('positionX', e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          label="Y Position (%)"
+                          type="number"
+                          value={editingElement?.positionY || ''}
+                          onChange={(e) => handleChange('positionY', e.target.value)}
+                        />
+                        <Button onClick={handleSaveChanges} color="primary">
+                          Save Changes
+                        </Button>
+                      </Box>
+                    </Dialog>
+                  </>
+                )
+            }
+            <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
+              <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
+            </Box>
+          </Box>
       <Grid container spacing={2}>
         <Grid item sm={2}>
           <Button onClick={handleAddSlide} variant="contained" color="primary">

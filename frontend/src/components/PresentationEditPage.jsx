@@ -64,7 +64,7 @@ const PresentationEditPage = () => {
 
       <EditTitleThumbnailModal openEditModal={openEditModal} handleCloseEditModal={handleCloseEditModal} presentation={presentation} setPresentation={setPresentation} newTitle={newTitle} setNewTitle={setNewTitle} newThumbnail={newThumbnail} setNewThumbnail={setNewThumbnail}></EditTitleThumbnailModal>
       <DeletePresentationModal id={id} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog}></DeletePresentationModal>
-      {presentation && <PresentationSlidesPage presentationId={id} />}
+      {presentation && <PresentationSlidesPage />}
     </Container>
   );
 };
