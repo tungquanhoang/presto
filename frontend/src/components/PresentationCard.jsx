@@ -39,8 +39,7 @@ const PresentationCard = ({ presentation }) => {
               backgroundColor: '#ccc',
             }}
           >
-            <Typography variant="subtitle1" color="text.secondary">
-            </Typography>
+            <Typography variant="subtitle1" color="secondary" />
           </Box>
           )
       }
@@ -48,10 +47,10 @@ const PresentationCard = ({ presentation }) => {
         <Typography gutterBottom variant="h5" component="h2">
           {presentation.name}
         </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body2" component="p">
           {presentation.description || ''}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2">
           Slides: {presentation.slides.length}
         </Typography>
       </CardContent>

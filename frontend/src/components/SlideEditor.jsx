@@ -6,6 +6,7 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CodeIcon from '@mui/icons-material/Code';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid } from '@material-ui/core';
+import ThemeBackgroundPicker from './ThemeBackgroundPicker';
 
 const modalStyle = {
   position: 'absolute',
@@ -18,7 +19,7 @@ const modalStyle = {
   p: 4,
 };
 
-const SlideEditor = ({ slides, currentSlideIndex, updateSlidesInStore, setSlides }) => {
+const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateSlidesInStore, setSlides, setLoading }) => {
   const [open, setOpen] = useState(false);
   const [elementType, setElementType] = useState('');
   const [programmingLanguage, setProgrammingLanguage] = useState('javascript'); // Additional state for programming language
@@ -40,7 +41,7 @@ const SlideEditor = ({ slides, currentSlideIndex, updateSlidesInStore, setSlides
   });
 
   const addElementToSlide = (element) => {
-    const updatedSlides = slides.map((slide, index) => {
+    const updatedSlides = presentation.slides.map((slide, index) => {
       if (index === currentSlideIndex) {
         return { ...slide, elements: [...slide.elements, element] }; // assuming each slide has an 'elements' array
       }
@@ -124,6 +125,9 @@ const SlideEditor = ({ slides, currentSlideIndex, updateSlidesInStore, setSlides
         </Grid>
         <Grid item xs={6} sm='auto'>
           <Button startIcon={<CodeIcon />} onClick={() => handleOpen('code')}>Add Code</Button>
+        </Grid>
+        <Grid item xs={6} sm='auto'>
+          <ThemeBackgroundPicker presentation={presentation} setPresentation={setPresentation} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} setLoading={setLoading} modalStyle={modalStyle}>Theme and Background Picker</ThemeBackgroundPicker>
         </Grid>
       </Grid>
 

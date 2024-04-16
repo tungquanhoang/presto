@@ -52,10 +52,12 @@ const Dashboard = () => {
         name: presentationName,
         description,
         thumbnail: null,
+        defaultColor: '#FFFFFF',
         slides: [
           {
             // Blank first slide
             id: uuidv4(),
+            backgroundColor: null, // default bg color being white
             elements: []
           }
         ]

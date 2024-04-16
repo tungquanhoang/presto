@@ -11,7 +11,7 @@ import PresentationSlideElement from './PresentationSlideElement';
 const PresentationSlidesPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const presentationId = id;
+  const [currentPresentation, setCurrentPresentation] = useState(null);
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null); // For context menu
@@ -31,8 +31,8 @@ const PresentationSlidesPage = () => {
 
   // Update URL based on slide number
   useEffect(() => {
-    navigate(`/presentation/${presentationId}/edit?slide=${currentSlideIndex + 1}`);
-  }, [currentSlideIndex, navigate, presentationId]);
+    navigate(`/presentation/${id}/edit?slide=${currentSlideIndex + 1}`);
+  }, [currentSlideIndex, navigate, id]);
 
   const fetchSlides = async () => {
     const token = localStorage.getItem('token');
@@ -43,7 +43,8 @@ const PresentationSlidesPage = () => {
     });
     const data = await response.json();
     if (response.ok && data.store && data.store.presentations) {
-      const presentation = data.store.presentations.find(p => p.id === presentationId);
+      const presentation = data.store.presentations.find(p => p.id === id);
+      setCurrentPresentation(presentation);
       if (presentation && presentation.slides) {
         setSlides(presentation.slides);
       }
@@ -70,7 +71,7 @@ const PresentationSlidesPage = () => {
 
     // Find the current presentation and update its slides
     const updatedPresentations = storeData.store.presentations.map(presentation => {
-      if (presentation.id === presentationId) {
+      if (presentation.id === currentPresentation.id) {
         return { ...presentation, slides: updatedSlides };
       }
       return presentation;
@@ -97,6 +98,7 @@ const PresentationSlidesPage = () => {
   const handleAddSlide = async () => {
     const newSlide = {
       id: uuidv4(),
+      backgroundColor: null,
       elements: []
     };
     const newSlides = [...slides, newSlide];
@@ -198,60 +200,60 @@ const PresentationSlidesPage = () => {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Slides</Typography>
-      <SlideEditor slides={slides} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} />
-        <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
-            {loading
-              ? (
-                  <CircularProgress />
-                )
-              : (
-                  <>
-                    {slides[currentSlideIndex].elements.map((element, index) => (
-                      <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
-                    ))}
-                    <Menu
-                      open={Boolean(anchorEl)}
-                      anchorEl={anchorEl}
-                      onClose={handleCloseMenu}
-                    >
-                      <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
-                    </Menu>
-                    <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
-                      <Box p={2}>
-                        <TextField
-                          fullWidth
-                          label="Content"
-                          value={editingElement?.content || ''}
-                          onChange={(e) => handleChange('content', e.target.value)}
-                        />
-                        <TextField
-                          fullWidth
-                          label="X Position (%)"
-                          type="number"
-                          value={editingElement?.positionX || ''}
-                          onChange={(e) => handleChange('positionX', e.target.value)}
-                        />
-                        <TextField
-                          fullWidth
-                          label="Y Position (%)"
-                          type="number"
-                          value={editingElement?.positionY || ''}
-                          onChange={(e) => handleChange('positionY', e.target.value)}
-                        />
-                        <Button onClick={handleSaveChanges} color="primary">
-                          Save Changes
-                        </Button>
-                      </Box>
-                    </Dialog>
-                  </>
-                )
-            }
-            <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
-              <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
-            </Box>
-          </Box>
+      <SlideEditor presentation={currentPresentation} setPresentation={setCurrentPresentation} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} setLoading={setLoading} />
+        {loading
+          ? (
+              <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+                <CircularProgress />
+              </Box>
+            )
+          : (
+              <Box style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+                {slides[currentSlideIndex].elements.map((element, index) => (
+                  <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick}></PresentationSlideElement>
+                ))}
+                <Menu
+                  open={Boolean(anchorEl)}
+                  anchorEl={anchorEl}
+                  onClose={handleCloseMenu}
+                >
+                  <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
+                </Menu>
+                <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+                  <Box p={2}>
+                    <TextField
+                      fullWidth
+                      label="Content"
+                      value={editingElement?.content || ''}
+                      onChange={(e) => handleChange('content', e.target.value)}
+                    />
+                    <TextField
+                      fullWidth
+                      label="X Position (%)"
+                      type="number"
+                      value={editingElement?.positionX || ''}
+                      onChange={(e) => handleChange('positionX', e.target.value)}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Y Position (%)"
+                      type="number"
+                      value={editingElement?.positionY || ''}
+                      onChange={(e) => handleChange('positionY', e.target.value)}
+                    />
+                    <Button onClick={handleSaveChanges} color="primary">
+                      Save Changes
+                    </Button>
+                  </Box>
+                </Dialog>
+              </Box>
+            )
+        }
+        <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
+          <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
+        </Box>
       <Grid container spacing={2}>
-        <Grid item sm={2}>
+        <Grid item sm={'auto'}>
           <Button onClick={handleAddSlide} variant="contained" color="primary">
             Add New Slide
           </Button>
@@ -263,7 +265,7 @@ const PresentationSlidesPage = () => {
             </Button>
           )}
         </Grid>
-        <Grid item sm={8} align='right'>
+        <Grid item sm={7} align='right'>
           {slides.length > 1 && (
             <>
               <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
