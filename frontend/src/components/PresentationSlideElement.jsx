@@ -7,7 +7,8 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
   const [startX, setStartX] = useState(element.positionX);
   const [startY, setStartY] = useState(element.positionY);
 
-  const handleMouseDown = (event, corner) => {
+  /* Handle moving/dragging element */
+  const handleMouseDown = (event) => {
     event.stopPropagation();
     setIsClicked(true);
     setIsDragging(true);
@@ -19,8 +20,8 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
     if (isDragging) {
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
-      const newX = element.positionX + (dx / window.innerWidth) * 100;
-      const newY = element.positionY + (dy / window.innerHeight) * 100;
+      const newX = element.positionX + (dx / window.innerWidth) * 125;
+      const newY = element.positionY + (dy / window.innerHeight) * 125;
       // Ensure the new position does not exceed the slide boundaries
       const newPositionX = Math.max(0, Math.min(newX, 100 - element.sizeWidth));
       const newPositionY = Math.max(0, Math.min(newY, 100 - element.sizeHeight));
@@ -43,7 +44,7 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
   };
 
   return (
-    <Box key={index} sx={{
+    <Box key={element.id} sx={{
       position: 'absolute',
       left: `${element.positionX}%`,
       top: `${element.positionY}%`,
@@ -51,9 +52,9 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
       height: `${element.sizeHeight}%`,
       border: '1px solid grey',
       overflow: 'hidden',
-      zIndex: index, // Ensures that elements later in the array are rendered on top
+      zIndex: `${element.layer}`, // Ensures that elements later in the array are rendered on top
     }}
-      onMouseDown={(event) => handleMouseDown(event, 'top-left')}
+      onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
@@ -96,9 +97,9 @@ const PresentationSlideElement = ({ element, index, handleDoubleClick, handleRig
       )}
       {isClicked &&
         [...Array(4)].map((_, cornerIndex) => (
-          <div
+          <Box
             key={cornerIndex}
-            style={{
+            sx={{
               position: 'absolute',
               width: '5px',
               height: '5px',

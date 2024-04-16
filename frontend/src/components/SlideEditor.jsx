@@ -67,6 +67,7 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
       content: '',
       sizeWidth: '50',
       sizeHeight: '50',
+      layer: '0',
       fontSize: '1.0',
       color: '#000000',
       imageUrl: '',
@@ -93,7 +94,7 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
       alert('Please check your input values.');
       return;
     }
-    const newElement = { ...elementProps, id: uuidv4(), type: elementType };
+    const newElement = { ...elementProps, id: uuidv4(), type: elementType, layer: presentation.slides.length };
     addElementToSlide(newElement);
     handleClose();
   };

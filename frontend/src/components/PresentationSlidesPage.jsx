@@ -72,7 +72,9 @@ const PresentationSlidesPage = () => {
     // Find the current presentation and update its slides
     const updatedPresentations = storeData.store.presentations.map(presentation => {
       if (presentation.id === currentPresentation.id) {
-        return { ...presentation, slides: updatedSlides };
+        const updatedPresentation = { ...presentation, slides: updatedSlides };
+        setCurrentPresentation(updatedPresentation);
+        return updatedPresentation;
       }
       return presentation;
     });
