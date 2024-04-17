@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -54,6 +54,7 @@ const PresentationSlidesPage = () => {
     }
   };
 
+  // Update the slides details in database
   const updateSlidesInStore = async (updatedSlides) => {
     const token = localStorage.getItem('token');
     // Fetch the current store data first
@@ -195,9 +196,26 @@ const PresentationSlidesPage = () => {
       } else {
         console.error('Failed to update slides on server');
       }
-      setEditModalOpen(false); // Close the modal in any case
     });
   };
+
+  // Get the slide screen sizes and details for use in rendering slide elements later
+  const slideRef = useRef(null);
+  const [slideSize, setSlideSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateBoxSize = () => {
+      const box = slideRef.current;
+      if (box) {
+        const { width, height } = box.getBoundingClientRect();
+        setSlideSize({ width, height });
+      }
+    };
+
+    updateBoxSize();
+    window.addEventListener('resize', updateBoxSize);
+    return () => window.removeEventListener('resize', updateBoxSize);
+  }, [loading]);
 
   return (
     <Container maxWidth="lg">
@@ -210,9 +228,9 @@ const PresentationSlidesPage = () => {
               </Box>
             )
           : (
-              <Box style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+              <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
                 {slides[currentSlideIndex].elements.map((element, index) => (
-                  <PresentationSlideElement key={index} element={element} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges}></PresentationSlideElement>
+                  <PresentationSlideElement key={index} slideSize={slideSize} element={element} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges}></PresentationSlideElement>
                 ))}
                 <Menu
                   open={Boolean(anchorEl)}
@@ -229,31 +247,20 @@ const PresentationSlidesPage = () => {
                       value={editingElement?.content || ''}
                       onChange={(e) => handleChange('content', e.target.value)}
                     />
-                    <TextField
-                      fullWidth
-                      label="X Position (%)"
-                      type="number"
-                      value={editingElement?.positionX || ''}
-                      onChange={(e) => handleChange('positionX', e.target.value)}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Y Position (%)"
-                      type="number"
-                      value={editingElement?.positionY || ''}
-                      onChange={(e) => handleChange('positionY', e.target.value)}
-                    />
-                    <Button onClick={() => handleSaveChanges(editingElement)} color="primary">
+                    <Button onClick={() => {
+                      handleSaveChanges(editingElement);
+                      setEditModalOpen(false);
+                    }} color="primary">
                       Save Changes
                     </Button>
                   </Box>
                 </Dialog>
+                <Box position="absolute" bottom={0} right={0} width={30} height={30} display="flex" alignItems="center" justifyContent="center">
+                  <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
+                </Box>
               </Box>
             )
         }
-        <Box position="absolute" bottom={0} left={0} width={50} height={50} display="flex" alignItems="center" justifyContent="center">
-          <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
-        </Box>
       <Grid container spacing={2}>
         <Grid item sm={'auto'}>
           <Button onClick={handleAddSlide} variant="contained" color="primary">
