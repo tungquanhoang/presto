@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd';
 
-const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handleRightClick, handleSaveChanges }) => {
+const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handleRightClick, handleSaveChanges, isPreview }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [state, setState] = useState({
     width: `${element.sizeWidth}%`,
@@ -30,7 +30,9 @@ const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handl
   }, [slideSize]);
 
   const handleMouseDown = (event) => {
-    setIsClicked(true);
+    if (!isPreview) {
+      setIsClicked(true);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -46,12 +48,19 @@ const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handl
     handleSaveChanges(element);
   }
 
+  let elementBorder = '';
+  if (!isPreview) {
+    elementBorder = '1px solid grey';
+  }
+
   return (
     <Rnd
       size={{ width: state.width, height: state.height }}
       position={{ x: state.x, y: state.y }}
       minWidth={'1%'}
       minHeight={'1%'}
+      enableResizing={!isPreview}
+      disableDragging={isPreview}
       onDragStop={(e, d) => {
         setState({ x: d.x, y: d.y, width: state.width, height: state.height });
       }}
@@ -67,7 +76,7 @@ const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handl
         position: 'absolute',
         width: '100%',
         height: '100%',
-        border: '1px solid grey',
+        border: elementBorder,
         overflow: 'hidden',
         zIndex: `${element.layer}`, // Ensures that elements later in the array are rendered on top
       }}

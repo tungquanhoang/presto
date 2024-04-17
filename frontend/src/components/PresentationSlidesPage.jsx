@@ -204,17 +204,17 @@ const PresentationSlidesPage = () => {
   const [slideSize, setSlideSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    const updateBoxSize = () => {
-      const box = slideRef.current;
-      if (box) {
-        const { width, height } = box.getBoundingClientRect();
+    const updateSlideSize = () => {
+      const slide = slideRef.current;
+      if (slide) {
+        const { width, height } = slide.getBoundingClientRect();
         setSlideSize({ width, height });
       }
     };
 
-    updateBoxSize();
-    window.addEventListener('resize', updateBoxSize);
-    return () => window.removeEventListener('resize', updateBoxSize);
+    updateSlideSize();
+    window.addEventListener('resize', updateSlideSize);
+    return () => window.removeEventListener('resize', updateSlideSize);
   }, [loading]);
 
   return (
@@ -228,9 +228,9 @@ const PresentationSlidesPage = () => {
               </Box>
             )
           : (
-              <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+              <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '2px solid grey' }}>
                 {slides[currentSlideIndex].elements.map((element, index) => (
-                  <PresentationSlideElement key={index} slideSize={slideSize} element={element} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges}></PresentationSlideElement>
+                  <PresentationSlideElement key={index} slideSize={slideSize} element={element} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={false}></PresentationSlideElement>
                 ))}
                 <Menu
                   open={Boolean(anchorEl)}
@@ -262,7 +262,7 @@ const PresentationSlidesPage = () => {
             )
         }
       <Grid container spacing={2}>
-        <Grid item sm={'auto'}>
+        <Grid item sm={2}>
           <Button onClick={handleAddSlide} variant="contained" color="primary">
             Add New Slide
           </Button>
@@ -274,7 +274,7 @@ const PresentationSlidesPage = () => {
             </Button>
           )}
         </Grid>
-        <Grid item sm={7} align='right'>
+        <Grid item sm={8} align='right'>
           {slides.length > 1 && (
             <>
               <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>
