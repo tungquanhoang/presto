@@ -19,6 +19,9 @@ const PresentationSlidesPage = () => {
   const [editingElement, setEditingElement] = useState(null);
   const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
 
+  const slideRef = useRef(null);
+  const [slideSize, setSlideSize] = useState({ width: 0, height: 0 });
+
   // Fetch initial slide data
   useEffect(() => {
     fetchSlides();
@@ -200,9 +203,6 @@ const PresentationSlidesPage = () => {
   };
 
   // Get the slide screen sizes and details for use in rendering slide elements later
-  const slideRef = useRef(null);
-  const [slideSize, setSlideSize] = useState({ width: 0, height: 0 });
-
   useEffect(() => {
     const updateSlideSize = () => {
       const slide = slideRef.current;
