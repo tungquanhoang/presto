@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, IconButton, Box, Grid, CircularProgress } from '@material-ui/core';
+import { Typography, IconButton, Box, Grid, CircularProgress, Button } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { animated, useTransition } from 'react-spring';
 import BACKEND_PORT from '../config.json';
 import PresentationSlideElement from './PresentationSlideElement';
+import SlideRearrangeScreen from './SlideRearrangeScreen';
 
 const PresentationPreviewPage = () => {
   const { id } = useParams();
@@ -15,6 +17,14 @@ const PresentationPreviewPage = () => {
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
+  const [showRearrangeScreen, setShowRearrangeScreen] = useState(false);
+
+  const transitions = useTransition(currentSlideIndex, {
+    from: { transform: 'translate3d(100%,0,0)' },
+    enter: { transform: 'translate3d(0%,0,0)' },
+    leave: { transform: 'translate3d(-100%,0,0)' },
+    config: { duration: 500 }
+  });
 
   // Fetch initial slide data
   useEffect(() => {
@@ -67,6 +77,11 @@ const PresentationPreviewPage = () => {
     }
   };
 
+  const handleRearrange = (newSlides) => {
+    setSlides(newSlides);
+    setShowRearrangeScreen(false);
+  };
+
   /* Placeholder fucntions so that double-clicking and right-clicking behaviors do not trigger */
   const handleDoubleClick = () => {};
   const handleRightClick = () => {};
@@ -98,14 +113,23 @@ const PresentationPreviewPage = () => {
             <CircularProgress />
           </Box>
           )
-        : (
+        : showRearrangeScreen
+          ? (
+          <SlideRearrangeScreen slides={slides} onRearrange={handleRearrange} onClose={() => setShowRearrangeScreen(false)} />
+            )
+          : (
         <>
           <Typography variant='h3' gutterBottom>Preview</Typography>
-          <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} display="flex" justifyContent="center" alignItems="center" minHeight={150} height='40vw' minWidth={266} width='100vw' position="relative" sx={{ border: '2px solid grey' }}>
-            {slides[currentSlideIndex].elements.map((element, index) => (
-              <PresentationSlideElement key={index} element={element} slideSize={slideSize} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={true}></PresentationSlideElement>
-            ))}
-          </Box>
+          {transitions((style, i) => (
+            currentSlideIndex === i &&
+            <animated.div style={style}>
+              <Box ref={slideRef} style={{ background: (slides[i].backgroundColor ? slides[i].backgroundColor : currentPresentation.defaultColor) }} display="flex" justifyContent="center" alignItems="center" minHeight={150} height='40vw' minWidth={266} width='100vw' position="relative" sx={{ border: '2px solid grey' }}>
+                {slides[i].elements.map((element, index) => (
+                  <PresentationSlideElement key={index} element={element} slideSize={slideSize} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={true}></PresentationSlideElement>
+                ))}
+              </Box>
+            </animated.div>
+          ))}
           <Box position="absolute" bottom={'1vh'} left={0} right={0}>
             <Grid container display='flex' justifyContent='center' spacing={2}>
               <Grid item xs={'auto'}>
@@ -121,10 +145,13 @@ const PresentationPreviewPage = () => {
                   <ArrowForwardIosIcon />
                 </IconButton>
               </Grid>
+              <Grid item>
+                <Button onClick={() => setShowRearrangeScreen(true)} style={{ position: 'absolute', top: 20, right: 20 }}>Rearrange Slides</Button>
+              </Grid>
             </Grid>
           </Box>
         </>
-          )}
+            )}
     </Box>
   );
 };

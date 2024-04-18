@@ -92,6 +92,7 @@ const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handl
             width: '100%',
             height: '100%',
             overflow: 'hidden', // Prevents text from overflowing the container
+            fontFamily: element.fontFamily || 'Arial',
           }}>
             {element.content}
           </Typography>
@@ -114,7 +115,8 @@ const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handl
             backgroundColor: '#f4f4f4', // Gives a light background color for better readability
             padding: '10px', // Adds some padding inside the pre element
             margin: 0, // Removes default margin to fit better within the box
-            whiteSpace: 'pre-wrap'
+            whiteSpace: 'pre-wrap',
+            fontFamily: element.fontFamily || 'Arial',
           }}>
             {element.content}
           </pre>

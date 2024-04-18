@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, Modal, TextField, Typography, MenuItem, Stack } from '@mui/material';
+import { Container, Button, Modal, TextField, Typography, MenuItem, Stack, Select, InputLabel, FormControl } from '@mui/material';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ImageIcon from '@mui/icons-material/Image';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
@@ -38,7 +38,14 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
     positionX: '0',
     positionY: '0',
     programmingLanguage: '',
+    fontFamily: 'Arial',
   });
+
+  const fontFamilies = [
+    { label: 'Arial', value: 'Arial, sans-serif' },
+    { label: 'Roboto', value: 'Roboto, sans-serif' },
+    { label: 'Times New Roman', value: 'Times New Roman, serif' }
+  ];
 
   const addElementToSlide = (element) => {
     const updatedSlides = presentation.slides.map((slide, index) => {
@@ -77,6 +84,7 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
       positionX: '0',
       positionY: '0',
       programmingLanguage: '',
+      fontFamily: 'Arial',
     });
   };
 
@@ -140,6 +148,21 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
             <TextField fullWidth label="Height (%)" name="sizeHeight" value={elementProps.sizeHeight} onChange={handleChange} />
             {elementType === 'text' && (
               <>
+                <FormControl fullWidth>
+                <InputLabel>Font Family</InputLabel>
+                <Select
+                    name="fontFamily"
+                    value={elementProps.fontFamily}
+                    label="Font Family"
+                    onChange={handleChange}
+                >
+                    {fontFamilies.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
                 <TextField fullWidth multiline maxRows={4} label="Text" name="content" value={elementProps.content} onChange={handleChange} />
                 <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
                 <TextField fullWidth type="color" label="Color" name="color" value={elementProps.color} onChange={handleChange} />
@@ -162,6 +185,21 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
             )}
             {elementType === 'code' && (
               <>
+                <FormControl fullWidth>
+                <InputLabel>Font Family</InputLabel>
+                <Select
+                    name="fontFamily"
+                    value={elementProps.fontFamily}
+                    label="Font Family"
+                    onChange={handleChange}
+                >
+                    {fontFamilies.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
                 <TextField
                   select
                   label="Language"

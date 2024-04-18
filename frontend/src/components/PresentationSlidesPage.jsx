@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress } from '@material-ui/core';
+import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress, Select } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useNavigate, useParams } from 'react-router-dom';
 import SlideEditor from './SlideEditor';
 import BACKEND_PORT from '../config.json';
 import PresentationSlideElement from './PresentationSlideElement';
+
+const availableFonts = [
+  { label: 'Arial', value: 'Arial, sans-serif' },
+  { label: 'Times New Roman', value: 'Times New Roman, serif' },
+  { label: 'Roboto', value: 'Roboto, sans-serif' }
+];
 
 const PresentationSlidesPage = () => {
   const { id } = useParams();
@@ -241,12 +247,121 @@ const PresentationSlidesPage = () => {
                 </Menu>
                 <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
                   <Box p={2}>
-                    <TextField
-                      fullWidth
-                      label="Content"
-                      value={editingElement?.content || ''}
-                      onChange={(e) => handleChange('content', e.target.value)}
-                    />
+                  {editingElement?.type === 'text' && (
+                    <>
+                        <TextField
+                        fullWidth
+                        label="Text Content"
+                        value={editingElement?.content || ''}
+                        onChange={(e) => handleChange('content', e.target.value)}
+                        />
+                        <TextField
+                        fullWidth
+                        label="Font Size (em)"
+                        type="number"
+                        value={editingElement?.fontSize || 1.0}
+                        onChange={(e) => handleChange('fontSize', parseFloat(e.target.value))}
+                        />
+                        <TextField
+                        fullWidth
+                        label="Color"
+                        type="color"
+                        value={editingElement?.color || '#000000'}
+                        onChange={(e) => handleChange('color', e.target.value)}
+                        />
+                        <Select
+                            fullWidth
+                            label="Font Family"
+                            value={editingElement?.fontFamily || availableFonts[0].value}
+                            onChange={(e) => handleChange('fontFamily', e.target.value)}
+                        >
+                            {availableFonts.map(font => (
+                            <MenuItem key={font.value} value={font.value}>{font.label}</MenuItem>
+                            ))}
+                        </Select>
+                    </>
+                  )}
+                  {editingElement?.type === 'image' && (
+                    <>
+                        <TextField
+                        fullWidth
+                        label="Image URL"
+                        value={editingElement?.imageUrl || ''}
+                        onChange={(e) => handleChange('imageUrl', e.target.value)}
+                        />
+                        <TextField
+                        fullWidth
+                        label="Alt Text"
+                        value={editingElement?.imageAlt || ''}
+                        onChange={(e) => handleChange('imageAlt', e.target.value)}
+                        />
+                    </>
+                  )}
+                  {editingElement?.type === 'video' && (
+                    <>
+                        <TextField
+                        fullWidth
+                        label="Video URL"
+                        value={editingElement?.videoUrl || ''}
+                        onChange={(e) => handleChange('videoUrl', e.target.value)}
+                        />
+                        <TextField
+                        fullWidth
+                        select
+                        label="Autoplay"
+                        value={editingElement?.autoplay ? 'true' : 'false'}
+                        onChange={(e) => handleChange('autoplay', e.target.value === 'true')}
+                        SelectProps={{ native: true }}
+                        >
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                        </TextField>
+                    </>
+                  )}
+                  {editingElement?.type === 'code' && (
+                    <>
+                        <TextField
+                        fullWidth
+                        select
+                        label="Programming Language"
+                        value={editingElement?.programmingLanguage || 'JavaScript'}
+                        onChange={(e) => handleChange('programmingLanguage', e.target.value)}
+                        SelectProps={{ native: true }}
+                        >
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Python">Python</option>
+                        <option value="C">C</option>
+                        </TextField>
+                        <TextField
+                        fullWidth
+                        multiline
+                        label="Code"
+                        value={editingElement?.content || ''}
+                        onChange={(e) => handleChange('content', e.target.value)}
+                        variant="outlined"
+                        rows={10} // Adjust the number of rows as needed
+                        placeholder="Enter your code here"
+                        />
+                        <TextField
+                        fullWidth
+                        type="number"
+                        label="Font Size (em)"
+                        value={editingElement?.fontSize || 1.0}
+                        onChange={(e) => handleChange('fontSize', parseFloat(e.target.value))}
+                        />
+                        <Select
+                            fullWidth
+                            label="Font Family"
+                            value={editingElement?.fontFamily || availableFonts[0].value}
+                            onChange={(e) => handleChange('fontFamily', e.target.value)}
+                        >
+                            {availableFonts.map(font => (
+                            <MenuItem key={font.value} value={font.value}>{font.label}</MenuItem>
+                            ))}
+                        </Select>
+                    </>
+                  )}
+
                     <Button onClick={() => {
                       handleSaveChanges(editingElement);
                       setEditModalOpen(false);
