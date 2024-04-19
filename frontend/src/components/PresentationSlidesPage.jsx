@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress, Select, DialogTitle, DialogContent } from '@material-ui/core';
+import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, Grid, CircularProgress, DialogTitle, DialogContent } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,12 +9,7 @@ import BACKEND_PORT from '../config.json';
 import PresentationSlideElement from './PresentationSlideElement';
 import { animated, useTransition } from 'react-spring';
 import SlideRearrangeScreen from './SlideRearrangeScreen';
-
-const availableFonts = [
-  { label: 'Arial', value: 'Arial, sans-serif' },
-  { label: 'Times New Roman', value: 'Times New Roman, serif' },
-  { label: 'Roboto', value: 'Roboto, sans-serif' }
-];
+import SlideElementEditModal from './SlideElementEditModal';
 
 const PresentationSlidesPage = () => {
   const { id } = useParams();
@@ -195,10 +190,6 @@ const PresentationSlidesPage = () => {
     setEditModalOpen(true);
   };
 
-  const handleChange = (name, value) => {
-    setEditingElement(prev => ({ ...prev, [name]: value }));
-  };
-
   const handleSaveChanges = (element) => {
     const updatedElements = slides[currentSlideIndex].elements.map(el =>
       el.id === element.id ? { ...el, ...element } : el
@@ -245,175 +236,51 @@ const PresentationSlidesPage = () => {
     <Container maxWidth='lg'>
       <Typography variant='h4'>Slides</Typography>
       <Button onClick={() => setShowRearrange(true)} style={{ margin: '10px' }}>
-                Rearrange Slides
-            </Button>
-            <Dialog
-                open={showRearrange}
-                onClose={() => setShowRearrange(false)}
-                fullWidth
-                maxWidth="lg"
-            >
-                <DialogTitle>Rearrange Slides</DialogTitle>
-                <DialogContent>
-                    <SlideRearrangeScreen slides={slides} onRearrange={handleRearrangeSlides} onClose={() => setShowRearrange(false)} />
-                </DialogContent>
-            </Dialog>
+        Rearrange Slides
+      </Button>
+      <Dialog
+        open={showRearrange}
+        onClose={() => setShowRearrange(false)}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogTitle>Rearrange Slides</DialogTitle>
+        <DialogContent>
+          <SlideRearrangeScreen slides={slides} onRearrange={handleRearrangeSlides} onClose={() => setShowRearrange(false)} />
+        </DialogContent>
+      </Dialog>
       <SlideEditor presentation={currentPresentation} setPresentation={setCurrentPresentation} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} setLoading={setLoading} />
-        {loading
-          ? (
-              <Box position='relative' display='flex' flexDirection='column' alignItems='center' justifyContent='center' minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
-                <CircularProgress />
-              </Box>
-            )
-          : (
-              transitions((style, item) => (
-                item === slides[currentSlideIndex] && (
-                  <animated.div style={style}>
-                    <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position='relative' display='flex' flexDirection='column' alignItems='center' justifyContent='center' minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '2px solid grey' }}>
-                        {slides[currentSlideIndex].elements.map((element, index) => (
-                        <PresentationSlideElement key={index} slideSize={slideSize} element={element} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={false}></PresentationSlideElement>
-                        ))}
-                        <Menu
-                        open={Boolean(anchorEl)}
-                        anchorEl={anchorEl}
-                        onClose={handleCloseMenu}
-                        >
-                        <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
-                        </Menu>
-                        <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)}>
-                        <Box p={2}>
-                        {editingElement?.type === 'text' && (
-                            <>
-                                <TextField
-                                fullWidth
-                                label='Text Content'
-                                value={editingElement?.content || ''}
-                                onChange={(e) => handleChange('content', e.target.value)}
-                                />
-                                <TextField
-                                fullWidth
-                                label='Font Size (em)'
-                                type='number'
-                                value={editingElement?.fontSize || 1.0}
-                                onChange={(e) => handleChange('fontSize', parseFloat(e.target.value))}
-                                />
-                                <TextField
-                                fullWidth
-                                label='Color'
-                                type='color'
-                                value={editingElement?.color || '#000000'}
-                                onChange={(e) => handleChange('color', e.target.value)}
-                                />
-                                <Select
-                                    fullWidth
-                                    label='Font Family'
-                                    value={editingElement?.fontFamily || availableFonts[0].value}
-                                    onChange={(e) => handleChange('fontFamily', e.target.value)}
-                                >
-                                    {availableFonts.map(font => (
-                                    <MenuItem key={font.value} value={font.value}>{font.label}</MenuItem>
-                                    ))}
-                                </Select>
-                            </>
-                        )}
-                        {editingElement?.type === 'image' && (
-                            <>
-                                <TextField
-                                fullWidth
-                                label='Image URL'
-                                value={editingElement?.imageUrl || ''}
-                                onChange={(e) => handleChange('imageUrl', e.target.value)}
-                                />
-                                <TextField
-                                fullWidth
-                                label='Alt Text'
-                                value={editingElement?.imageAlt || ''}
-                                onChange={(e) => handleChange('imageAlt', e.target.value)}
-                                />
-                            </>
-                        )}
-                        {editingElement?.type === 'video' && (
-                            <>
-                                <TextField
-                                fullWidth
-                                label='Video URL'
-                                value={editingElement?.videoUrl || ''}
-                                onChange={(e) => handleChange('videoUrl', e.target.value)}
-                                />
-                                <TextField
-                                fullWidth
-                                select
-                                label='Autoplay'
-                                value={editingElement?.autoplay ? 'true' : 'false'}
-                                onChange={(e) => handleChange('autoplay', e.target.value === 'true')}
-                                SelectProps={{ native: true }}
-                                >
-                                <option value='false'>No</option>
-                                <option value='true'>Yes</option>
-                                </TextField>
-                            </>
-                        )}
-                        {editingElement?.type === 'code' && (
-                            <>
-                                <TextField
-                                fullWidth
-                                select
-                                label='Programming Language'
-                                value={editingElement?.programmingLanguage || 'JavaScript'}
-                                onChange={(e) => handleChange('programmingLanguage', e.target.value)}
-                                SelectProps={{ native: true }}
-                                >
-                                <option value='JavaScript'>JavaScript</option>
-                                <option value='Python'>Python</option>
-                                <option value='C'>C</option>
-                                </TextField>
-                                <TextField
-                                fullWidth
-                                multiline
-                                label='Code'
-                                value={editingElement?.content || ''}
-                                onChange={(e) => handleChange('content', e.target.value)}
-                                variant='outlined'
-                                rows={10} // Adjust the number of rows as needed
-                                placeholder='Enter your code here'
-                                />
-                                <TextField
-                                fullWidth
-                                type='number'
-                                label='Font Size (em)'
-                                value={editingElement?.fontSize || 1.0}
-                                onChange={(e) => handleChange('fontSize', parseFloat(e.target.value))}
-                                />
-                                <Select
-                                    fullWidth
-                                    label='Font Family'
-                                    value={editingElement?.fontFamily || availableFonts[0].value}
-                                    onChange={(e) => handleChange('fontFamily', e.target.value)}
-                                >
-                                    {availableFonts.map(font => (
-                                    <MenuItem key={font.value} value={font.value}>{font.label}</MenuItem>
-                                    ))}
-                                </Select>
-                            </>
-                        )}
-
-                            <Button onClick={() => {
-                              handleSaveChanges(editingElement);
-                              setEditModalOpen(false);
-                            }} color='primary'>
-                              Save Changes
-                            </Button>
-                        </Box>
-                </Dialog>
-                <Box position='absolute' bottom={0} right={0} width={30} height={30} display='flex' alignItems='center' justifyContent='center'>
-                  <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
-                </Box>
-              </Box>
-              </animated.div>
-                )
-              ))
-            )
-        }
+      {loading
+        ? (
+          <Box position='relative' display='flex' flexDirection='column' alignItems='center' justifyContent='center' minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+            <CircularProgress />
+          </Box>
+          )
+        : (
+            transitions((style, item) => (
+              item === slides[currentSlideIndex] && (
+                <animated.div style={style}>
+                  <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position='relative' display='flex' flexDirection='column' alignItems='center' justifyContent='center' minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '2px solid grey' }}>
+                    {slides[currentSlideIndex].elements.map((element, index) => (
+                      <PresentationSlideElement key={index} slideSize={slideSize} element={element} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={false}></PresentationSlideElement>
+                    ))}
+                    <Menu
+                      open={Boolean(anchorEl)}
+                      anchorEl={anchorEl}
+                      onClose={handleCloseMenu}
+                    >
+                      <MenuItem onClick={handleDeleteElement}>Delete</MenuItem>
+                    </Menu>
+                    <SlideElementEditModal editingElement={editingElement} setEditingElement={setEditingElement} editModalOpen={editModalOpen} setEditModalOpen={setEditModalOpen} handleSaveChanges={handleSaveChanges} />
+                    <Box position='absolute' bottom={0} right={0} width={30} height={30} display='flex' alignItems='center' justifyContent='center'>
+                      <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
+                    </Box>
+                  </Box>
+                </animated.div>
+              )
+            ))
+          )
+      }
       <Grid container spacing={2}>
         <Grid item sm={2}>
           <Button onClick={handleAddSlide} variant='contained' color='primary'>
