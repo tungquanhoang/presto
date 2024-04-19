@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd';
 
 const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handleRightClick, handleSaveChanges, isPreview }) => {
+  // State for tracking element dimensions and position
   const [isClicked, setIsClicked] = useState(false);
   const [state, setState] = useState({
     width: `${element.sizeWidth}%`,
@@ -48,6 +49,7 @@ const PresentationSlideElement = ({ element, slideSize, handleDoubleClick, handl
     handleSaveChanges(element);
   }
 
+  // Determine border styling based on preview mode
   let elementBorder = '';
   if (!isPreview) {
     elementBorder = '1px solid grey';

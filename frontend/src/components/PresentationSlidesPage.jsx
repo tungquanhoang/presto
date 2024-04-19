@@ -12,18 +12,18 @@ import SlideRearrangeScreen from './SlideRearrangeScreen';
 import SlideElementEditModal from './SlideElementEditModal';
 
 const PresentationSlidesPage = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Retrieve presentation ID from URL
   const navigate = useNavigate();
   const [currentPresentation, setCurrentPresentation] = useState(null);
-  const [slides, setSlides] = useState([]);
+  const [slides, setSlides] = useState([]); // Array of slide objects
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [anchorEl, setAnchorEl] = useState(null); // For context menu
-  const [editModalOpen, setEditModalOpen] = useState(false); // For edit modal
+  const [anchorEl, setAnchorEl] = useState(null); // For the material-UI menu anchor
+  const [editModalOpen, setEditModalOpen] = useState(false); // For the material-UI menu anchor
   const [editingElement, setEditingElement] = useState(null);
-  const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
-  const [showRearrange, setShowRearrange] = useState(false);
-  const slideRef = useRef(null);
-  const [slideSize, setSlideSize] = useState({ width: 0, height: 0 });
+  const [loading, setLoading] = useState(true); // State to manage loading indicator
+  const [showRearrange, setShowRearrange] = useState(false); // State to toggle the rearrange slides modal
+  const slideRef = useRef(null); // Reference to the slide DOM element
+  const [slideSize, setSlideSize] = useState({ width: 0, height: 0 }); // Store dimensions of the slide
 
   const transitions = useTransition(slides[currentSlideIndex], {
     from: { opacity: 0, transform: 'translate3d(100%,0,0)' }, // Starting styles

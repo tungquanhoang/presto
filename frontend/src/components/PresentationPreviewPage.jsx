@@ -10,13 +10,17 @@ import BACKEND_PORT from '../config.json';
 import PresentationSlideElement from './PresentationSlideElement';
 
 const PresentationPreviewPage = () => {
+  // Retrieve the presentation ID from URL parameters.
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // State for storing presentation details and slide information.
   const [currentPresentation, setCurrentPresentation] = useState(null);
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
 
+  // Fetch presentation data on component mount or when ID changes.
   const transitions = useTransition(currentSlideIndex, {
     from: { transform: 'translate3d(100%,0,0)' },
     enter: { transform: 'translate3d(0%,0,0)' },

@@ -2,12 +2,15 @@ import React from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const SlideRearrangeScreen = ({ slides, onRearrange, onClose }) => {
+  // State to manage the local copy of slides, allowing reordering without immediately affecting the parent component's state.
   const [internalSlides, setInternalSlides] = React.useState(slides);
 
+  // Effect to update internal state when the slides prop changes. This ensures the component stays in sync with external changes.
   React.useEffect(() => {
     setInternalSlides(slides);
   }, [slides]);
 
+  // Handler for when a drag operation finishes
   const handleDragEnd = (result) => {
     console.log('Drag result:', result);
     if (!result.destination) {

@@ -10,6 +10,7 @@ import BACKEND_PORT from '../config.json';
 const Dashboard = () => {
   const [presentations, setPresentations] = useState([]);
 
+  // Fetch presentations from the backend on component mount
   useEffect(() => {
     const fetchPresentations = async () => {
       const token = localStorage.getItem('token');
@@ -32,6 +33,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  // Handle creating a new presentation
   const handlePresentationCreate = async (presentationName, description) => {
     const token = localStorage.getItem('token');
     try {

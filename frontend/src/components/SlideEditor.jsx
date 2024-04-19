@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Box, Grid } from '@material-ui/core';
 import ThemeBackgroundPicker from './ThemeBackgroundPicker';
 
+// Styles for the modal pop-up
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -20,10 +21,10 @@ const modalStyle = {
 };
 
 const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateSlidesInStore, setSlides, setLoading }) => {
-  const [open, setOpen] = useState(false);
-  const [elementType, setElementType] = useState('');
-  const [programmingLanguage, setProgrammingLanguage] = useState('javascript'); // Additional state for programming language
-  const [elementProps, setElementProps] = useState({
+  const [open, setOpen] = useState(false); // Controls if the modal is open
+  const [elementType, setElementType] = useState(''); // Stores the type of element to be added
+  const [programmingLanguage, setProgrammingLanguage] = useState('javascript'); // State for programming language for code elements
+  const [elementProps, setElementProps] = useState({ // Stores properties of the new element to be created
     id: '',
     type: '',
     content: '',
@@ -41,12 +42,14 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
     fontFamily: 'Arial',
   });
 
+  // Predefined font families for selection
   const fontFamilies = [
     { label: 'Arial', value: 'Arial, sans-serif' },
     { label: 'Roboto', value: 'Roboto, sans-serif' },
     { label: 'Times New Roman', value: 'Times New Roman, serif' }
   ];
 
+  // Function to add the created element to the current slide
   const addElementToSlide = (element) => {
     const updatedSlides = presentation.slides.map((slide, index) => {
       if (index === currentSlideIndex) {
@@ -55,6 +58,7 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
       return slide;
     });
 
+    // Update the slides in the backend
     updateSlidesInStore(updatedSlides).then(success => {
       if (success) {
         setSlides(updatedSlides);
@@ -64,6 +68,7 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
     });
   };
 
+  // Function to open the modal and set up defaults based on element type
   const handleOpen = (type) => {
     setElementType(type);
     setOpen(true);
@@ -88,15 +93,18 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
     });
   };
 
+  // Function to close the modal
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Function to handle changes in form fields
   const handleChange = (event) => {
     const { name, value } = event.target;
     setElementProps(prev => ({ ...prev, [name]: value }));
   };
 
+  // Function to validate element input and add element to slide
   const addElement = () => {
     if (!validateElement(elementProps)) {
       alert('Please check your input values.');
@@ -107,6 +115,7 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
     handleClose();
   };
 
+  // Function to validate properties of the element before adding
   const validateElement = (props) => {
     if (props.sizeWidth < 0 || props.sizeWidth > 100 || props.sizeHeight < 0 || props.sizeHeight > 100) {
       return false;
