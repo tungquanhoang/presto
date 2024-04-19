@@ -10,12 +10,12 @@ function App () {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route exact path="/login" element={<LoginScreen />} />
-        <Route exact path="/register" element={<RegisterScreen />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
-        <Route path="/presentation/:id/edit" element={<PresentationEditPage />} />
-        <Route path="/presentation/:id/preview" element={<PresentationPreviewPage />} />
+        <Route path='/' element={<Navigate to='/login' />} />
+        <Route exact path='/login' element={<LoginScreen />} />
+        <Route exact path='/register' element={<RegisterScreen />} />
+        <Route exact path='/dashboard' element={<Dashboard />} />
+        <Route path='/presentation/:id/edit' element={<PresentationEditPage />} />
+        <Route path='/presentation/:id/preview' element={<PresentationPreviewPage />} />
       </Routes>
     </Router>
   );

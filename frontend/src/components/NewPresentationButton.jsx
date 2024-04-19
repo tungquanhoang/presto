@@ -19,7 +19,7 @@ const NewPresentationModal = ({ onPresentationCreate }) => {
     setOpen(false);
   };
 
-  // Function to handle the creation logic when the "Create" button is clicked
+  // Function to handle the creation logic when the Create button is clicked
   const handleCreate = () => {
     onPresentationCreate(presentationName, description);
     setPresentationName('');

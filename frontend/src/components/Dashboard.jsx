@@ -92,7 +92,7 @@ const Dashboard = () => {
 
   return (
     <Container maxWidth='lg'>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
         <NewPresentationModal onPresentationCreate={handlePresentationCreate} />
         <LogoutButton />
       </Box>

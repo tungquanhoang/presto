@@ -242,7 +242,7 @@ const PresentationSlidesPage = () => {
         open={showRearrange}
         onClose={() => setShowRearrange(false)}
         fullWidth
-        maxWidth="lg"
+        maxWidth='lg'
       >
         <DialogTitle>Rearrange Slides</DialogTitle>
         <DialogContent>
