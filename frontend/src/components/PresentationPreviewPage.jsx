@@ -78,8 +78,51 @@ const PresentationPreviewPage = () => {
   };
 
   const handleRearrange = (newSlides) => {
-    setSlides(newSlides);
-    setShowRearrangeScreen(false);
+    updateSlidesInStore(newSlides).then(() => {
+      setSlides(newSlides);
+      setShowRearrangeScreen(false);
+    });
+  };
+
+  const updateSlidesInStore = async (updatedSlides) => {
+    const token = localStorage.getItem('token');
+
+    // Fetch the existing presentations from the store
+    const response = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Failed to fetch current store data:', data);
+      return false;
+    }
+
+    // Update only the current presentation's slides without affecting other presentations
+    const updatedPresentations = data.store.presentations.map(pres =>
+      pres.id === currentPresentation.id
+        ? { ...pres, slides: updatedSlides }
+        : pres
+    );
+
+    // Send the updated presentations back to the server
+    const updateResponse = await fetch(`http://localhost:${BACKEND_PORT.BACKEND_PORT}/store`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ store: { presentations: updatedPresentations } })
+    });
+
+    if (!updateResponse.ok) {
+      console.error('Failed to update slides:', await updateResponse.json());
+      return false;
+    }
+
+    return true;
   };
 
   /* Placeholder fucntions so that double-clicking and right-clicking behaviors do not trigger */
