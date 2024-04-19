@@ -62,8 +62,8 @@ const SlideRearrangeScreen = ({ slides, onRearrange, onClose }) => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      width: '300px',
-                      height: '150px',
+                      width: '100px',
+                      height: '50px',
                     }}
                   >
                     Slide {index + 1}

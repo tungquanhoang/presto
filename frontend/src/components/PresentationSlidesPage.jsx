@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress, Select } from '@material-ui/core';
+import { Button, Typography, Box, Container, IconButton, Menu, MenuItem, Dialog, TextField, Grid, CircularProgress, Select, DialogTitle, DialogContent } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import SlideEditor from './SlideEditor';
 import BACKEND_PORT from '../config.json';
 import PresentationSlideElement from './PresentationSlideElement';
 import { animated, useTransition } from 'react-spring';
+import SlideRearrangeScreen from './SlideRearrangeScreen';
 
 const availableFonts = [
   { label: 'Arial', value: 'Arial, sans-serif' },
@@ -25,7 +26,7 @@ const PresentationSlidesPage = () => {
   const [editModalOpen, setEditModalOpen] = useState(false); // For edit modal
   const [editingElement, setEditingElement] = useState(null);
   const [loading, setLoading] = useState(true); // Indicate that the page is fetching the slide
-
+  const [showRearrange, setShowRearrange] = useState(false);
   const slideRef = useRef(null);
   const [slideSize, setSlideSize] = useState({ width: 0, height: 0 });
 
@@ -215,6 +216,12 @@ const PresentationSlidesPage = () => {
     });
   };
 
+  const handleRearrangeSlides = (newSlides) => {
+    setSlides(newSlides);
+    updateSlidesInStore(newSlides); // Assume this function handles updating the backend
+    setShowRearrange(false); // Close rearrange screen after updating
+  };
+
   // Get the slide screen sizes and details for use in rendering slide elements later
   useEffect(() => {
     const updateSlideSize = () => {
@@ -233,6 +240,20 @@ const PresentationSlidesPage = () => {
   return (
     <Container maxWidth='lg'>
       <Typography variant='h4'>Slides</Typography>
+      <Button onClick={() => setShowRearrange(true)} style={{ margin: '10px' }}>
+                Rearrange Slides
+            </Button>
+            <Dialog
+                open={showRearrange}
+                onClose={() => setShowRearrange(false)}
+                fullWidth
+                maxWidth="lg"
+            >
+                <DialogTitle>Rearrange Slides</DialogTitle>
+                <DialogContent>
+                    <SlideRearrangeScreen slides={slides} onRearrange={handleRearrangeSlides} onClose={() => setShowRearrange(false)} />
+                </DialogContent>
+            </Dialog>
       <SlideEditor presentation={currentPresentation} setPresentation={setCurrentPresentation} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} setLoading={setLoading} />
         {loading
           ? (
