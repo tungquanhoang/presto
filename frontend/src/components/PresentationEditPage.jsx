@@ -55,12 +55,12 @@ const PresentationEditPage = () => {
   };
 
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h4">Edit Presentation: {presentation?.name}</Typography>
-      <Button onClick={handleBack} color="primary">Back to Dashboard</Button>
-      <Button onClick={handleOpenEditModal} color="primary">Edit Title and Thumbnail</Button>
-      <Button onClick={handlePresentationPreview} color="primary">Preview</Button>
-      <Button onClick={() => setOpenDeleteDialog(true)} color="secondary">Delete Presentation</Button>
+    <Container maxWidth='lg'>
+      <Typography variant='h4'>Edit Presentation: {presentation?.name}</Typography>
+      <Button onClick={handleBack} color='primary'>Back to Dashboard</Button>
+      <Button onClick={handleOpenEditModal} color='primary'>Edit Title and Thumbnail</Button>
+      <Button onClick={handlePresentationPreview} color='primary'>Preview</Button>
+      <Button onClick={() => setOpenDeleteDialog(true)} color='secondary'>Delete Presentation</Button>
 
       <EditTitleThumbnailModal openEditModal={openEditModal} handleCloseEditModal={handleCloseEditModal} presentation={presentation} setPresentation={setPresentation} newTitle={newTitle} setNewTitle={setNewTitle} newThumbnail={newThumbnail} setNewThumbnail={setNewThumbnail}></EditTitleThumbnailModal>
       <DeletePresentationModal id={id} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog}></DeletePresentationModal>

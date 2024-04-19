@@ -224,17 +224,17 @@ const PresentationSlidesPage = () => {
   }, [loading]);
 
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h4">Slides</Typography>
+    <Container maxWidth='lg'>
+      <Typography variant='h4'>Slides</Typography>
       <SlideEditor presentation={currentPresentation} setPresentation={setCurrentPresentation} currentSlideIndex={currentSlideIndex} updateSlidesInStore={updateSlidesInStore} setSlides={setSlides} setLoading={setLoading} />
         {loading
           ? (
-              <Box position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
+              <Box position='relative' display='flex' flexDirection='column' alignItems='center' justifyContent='center' minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '1px solid grey' }}>
                 <CircularProgress />
               </Box>
             )
           : (
-              <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position="relative" display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '2px solid grey' }}>
+              <Box ref={slideRef} style={{ background: (slides[currentSlideIndex].backgroundColor ? slides[currentSlideIndex].backgroundColor : currentPresentation.defaultColor) }} position='relative' display='flex' flexDirection='column' alignItems='center' justifyContent='center' minHeight={150} height='40vw' minWidth={266} my={4} sx={{ border: '2px solid grey' }}>
                 {slides[currentSlideIndex].elements.map((element, index) => (
                   <PresentationSlideElement key={index} slideSize={slideSize} element={element} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={false}></PresentationSlideElement>
                 ))}
@@ -251,27 +251,27 @@ const PresentationSlidesPage = () => {
                     <>
                         <TextField
                         fullWidth
-                        label="Text Content"
+                        label='Text Content'
                         value={editingElement?.content || ''}
                         onChange={(e) => handleChange('content', e.target.value)}
                         />
                         <TextField
                         fullWidth
-                        label="Font Size (em)"
-                        type="number"
+                        label='Font Size (em)'
+                        type='number'
                         value={editingElement?.fontSize || 1.0}
                         onChange={(e) => handleChange('fontSize', parseFloat(e.target.value))}
                         />
                         <TextField
                         fullWidth
-                        label="Color"
-                        type="color"
+                        label='Color'
+                        type='color'
                         value={editingElement?.color || '#000000'}
                         onChange={(e) => handleChange('color', e.target.value)}
                         />
                         <Select
                             fullWidth
-                            label="Font Family"
+                            label='Font Family'
                             value={editingElement?.fontFamily || availableFonts[0].value}
                             onChange={(e) => handleChange('fontFamily', e.target.value)}
                         >
@@ -285,13 +285,13 @@ const PresentationSlidesPage = () => {
                     <>
                         <TextField
                         fullWidth
-                        label="Image URL"
+                        label='Image URL'
                         value={editingElement?.imageUrl || ''}
                         onChange={(e) => handleChange('imageUrl', e.target.value)}
                         />
                         <TextField
                         fullWidth
-                        label="Alt Text"
+                        label='Alt Text'
                         value={editingElement?.imageAlt || ''}
                         onChange={(e) => handleChange('imageAlt', e.target.value)}
                         />
@@ -301,20 +301,20 @@ const PresentationSlidesPage = () => {
                     <>
                         <TextField
                         fullWidth
-                        label="Video URL"
+                        label='Video URL'
                         value={editingElement?.videoUrl || ''}
                         onChange={(e) => handleChange('videoUrl', e.target.value)}
                         />
                         <TextField
                         fullWidth
                         select
-                        label="Autoplay"
+                        label='Autoplay'
                         value={editingElement?.autoplay ? 'true' : 'false'}
                         onChange={(e) => handleChange('autoplay', e.target.value === 'true')}
                         SelectProps={{ native: true }}
                         >
-                        <option value="false">No</option>
-                        <option value="true">Yes</option>
+                        <option value='false'>No</option>
+                        <option value='true'>Yes</option>
                         </TextField>
                     </>
                   )}
@@ -323,35 +323,35 @@ const PresentationSlidesPage = () => {
                         <TextField
                         fullWidth
                         select
-                        label="Programming Language"
+                        label='Programming Language'
                         value={editingElement?.programmingLanguage || 'JavaScript'}
                         onChange={(e) => handleChange('programmingLanguage', e.target.value)}
                         SelectProps={{ native: true }}
                         >
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="Python">Python</option>
-                        <option value="C">C</option>
+                        <option value='JavaScript'>JavaScript</option>
+                        <option value='Python'>Python</option>
+                        <option value='C'>C</option>
                         </TextField>
                         <TextField
                         fullWidth
                         multiline
-                        label="Code"
+                        label='Code'
                         value={editingElement?.content || ''}
                         onChange={(e) => handleChange('content', e.target.value)}
-                        variant="outlined"
+                        variant='outlined'
                         rows={10} // Adjust the number of rows as needed
-                        placeholder="Enter your code here"
+                        placeholder='Enter your code here'
                         />
                         <TextField
                         fullWidth
-                        type="number"
-                        label="Font Size (em)"
+                        type='number'
+                        label='Font Size (em)'
                         value={editingElement?.fontSize || 1.0}
                         onChange={(e) => handleChange('fontSize', parseFloat(e.target.value))}
                         />
                         <Select
                             fullWidth
-                            label="Font Family"
+                            label='Font Family'
                             value={editingElement?.fontFamily || availableFonts[0].value}
                             onChange={(e) => handleChange('fontFamily', e.target.value)}
                         >
@@ -365,12 +365,12 @@ const PresentationSlidesPage = () => {
                     <Button onClick={() => {
                       handleSaveChanges(editingElement);
                       setEditModalOpen(false);
-                    }} color="primary">
+                    }} color='primary'>
                       Save Changes
                     </Button>
                   </Box>
                 </Dialog>
-                <Box position="absolute" bottom={0} right={0} width={30} height={30} display="flex" alignItems="center" justifyContent="center">
+                <Box position='absolute' bottom={0} right={0} width={30} height={30} display='flex' alignItems='center' justifyContent='center'>
                   <Typography style={{ fontSize: '1em' }}>{currentSlideIndex + 1}</Typography>
                 </Box>
               </Box>
@@ -378,13 +378,13 @@ const PresentationSlidesPage = () => {
         }
       <Grid container spacing={2}>
         <Grid item sm={2}>
-          <Button onClick={handleAddSlide} variant="contained" color="primary">
+          <Button onClick={handleAddSlide} variant='contained' color='primary'>
             Add New Slide
           </Button>
         </Grid>
         <Grid item sm={2}>
           {slides.length > 0 && (
-            <Button onClick={handleDeleteSlide} variant="contained" color="secondary">
+            <Button onClick={handleDeleteSlide} variant='contained' color='secondary'>
               Delete Slide
             </Button>
           )}

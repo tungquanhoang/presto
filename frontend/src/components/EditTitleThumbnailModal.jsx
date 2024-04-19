@@ -31,27 +31,27 @@ const EditTitleThumbnailModal = ({ openEditModal, handleCloseEditModal, presenta
       <DialogContent>
         <TextField
           autoFocus
-          margin="dense"
-          label="Title"
-          type="text"
+          margin='dense'
+          label='Title'
+          type='text'
           fullWidth
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
         />
         <TextField
-          margin="dense"
-          label="Thumbnail URL"
-          type="text"
+          margin='dense'
+          label='Thumbnail URL'
+          type='text'
           fullWidth
           value={newThumbnail}
           onChange={(e) => setNewThumbnail(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseEditModal} color="primary">
+        <Button onClick={handleCloseEditModal} color='primary'>
           Cancel
         </Button>
-        <Button onClick={handleUpdatePresentation} color="primary">
+        <Button onClick={handleUpdatePresentation} color='primary'>
           Save Changes
         </Button>
       </DialogActions>

@@ -149,10 +149,10 @@ const PresentationPreviewPage = () => {
   }, [loading]);
 
   return (
-    <Box display="flex" flexDirection={'column'} alignItems="center" height="100vh" overflow={'scroll'}>
+    <Box display='flex' flexDirection={'column'} alignItems='center' height='100vh' overflow={'scroll'}>
       {loading
         ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
             <CircularProgress />
           </Box>
           )
@@ -166,14 +166,14 @@ const PresentationPreviewPage = () => {
           {transitions((style, i) => (
             currentSlideIndex === i &&
             <animated.div style={style}>
-              <Box ref={slideRef} style={{ background: (slides[i].backgroundColor ? slides[i].backgroundColor : currentPresentation.defaultColor) }} display="flex" justifyContent="center" alignItems="center" minHeight={150} height='40vw' minWidth={266} width='100vw' position="relative" sx={{ border: '2px solid grey' }}>
+              <Box ref={slideRef} style={{ background: (slides[i].backgroundColor ? slides[i].backgroundColor : currentPresentation.defaultColor) }} display='flex' justifyContent='center' alignItems='center' minHeight={150} height='40vw' minWidth={266} width='100vw' position='relative' sx={{ border: '2px solid grey' }}>
                 {slides[i].elements.map((element, index) => (
                   <PresentationSlideElement key={index} element={element} slideSize={slideSize} index={index} handleDoubleClick={handleDoubleClick} handleRightClick={handleRightClick} handleSaveChanges={handleSaveChanges} isPreview={true}></PresentationSlideElement>
                 ))}
               </Box>
             </animated.div>
           ))}
-          <Box position="absolute" bottom={'1vh'} left={0} right={0}>
+          <Box position='absolute' bottom={'1vh'} left={0} right={0}>
             <Grid container display='flex' justifyContent='center' spacing={2}>
               <Grid item xs={'auto'}>
                 <IconButton onClick={handlePreviousSlide} disabled={currentSlideIndex === 0}>

@@ -30,7 +30,7 @@ const SlideRearrangeScreen = ({ slides, onRearrange, onClose }) => {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="slides" direction="horizontal">
+      <Droppable droppableId='slides' direction='horizontal'>
         {(provided) => (
           <div
             {...provided.droppableProps}

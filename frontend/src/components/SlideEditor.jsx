@@ -5,7 +5,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CodeIcon from '@mui/icons-material/Code';
 import { v4 as uuidv4 } from 'uuid';
-import { Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import ThemeBackgroundPicker from './ThemeBackgroundPicker';
 
 const modalStyle = {
@@ -121,8 +121,8 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
   };
 
   return (
-    <Container maxWidth="xl">
-      <Grid container justifyContent='flex-start' alignContent='center' spacing={2}>
+    <Box maxWidth='xl' sx={{ p: 0 }}>
+      <Grid container justifyContent='flex-start' alignContent='flex-start' spacing={2}>
         <Grid item xs={6} sm='auto'>
           <Button startIcon={<TextFieldsIcon />} onClick={() => handleOpen('text')}>Add Text</Button>
         </Grid>
@@ -143,17 +143,17 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
       <Modal open={open} onClose={handleClose}>
         <Container maxWidth='xs' sx={modalStyle}>
           <Stack spacing={3}>
-            <Typography variant="h6" component="h2">{`Add ${elementType}`}</Typography>
-            <TextField fullWidth label="Width (%)" name="sizeWidth" value={elementProps.sizeWidth} onChange={handleChange} />
-            <TextField fullWidth label="Height (%)" name="sizeHeight" value={elementProps.sizeHeight} onChange={handleChange} />
+            <Typography variant='h6' component='h2'>{`Add ${elementType}`}</Typography>
+            <TextField fullWidth label='Width (%)' name='sizeWidth' value={elementProps.sizeWidth} onChange={handleChange} />
+            <TextField fullWidth label='Height (%)' name='sizeHeight' value={elementProps.sizeHeight} onChange={handleChange} />
             {elementType === 'text' && (
               <>
                 <FormControl fullWidth>
                 <InputLabel>Font Family</InputLabel>
                 <Select
-                    name="fontFamily"
+                    name='fontFamily'
                     value={elementProps.fontFamily}
-                    label="Font Family"
+                    label='Font Family'
                     onChange={handleChange}
                 >
                     {fontFamilies.map((option) => (
@@ -163,21 +163,21 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
                     ))}
                 </Select>
                 </FormControl>
-                <TextField fullWidth multiline maxRows={4} label="Text" name="content" value={elementProps.content} onChange={handleChange} />
-                <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
-                <TextField fullWidth type="color" label="Color" name="color" value={elementProps.color} onChange={handleChange} />
+                <TextField fullWidth multiline maxRows={4} label='Text' name='content' value={elementProps.content} onChange={handleChange} />
+                <TextField fullWidth type='number' label='Font Size (em)' name='fontSize' value={elementProps.fontSize} onChange={handleChange} />
+                <TextField fullWidth type='color' label='Color' name='color' value={elementProps.color} onChange={handleChange} />
               </>
             )}
             {elementType === 'image' && (
               <>
-                <TextField fullWidth label="Image URL" name="imageUrl" value={elementProps.imageUrl} onChange={handleChange} />
-                <TextField fullWidth label="Alt Text" name="imageAlt" value={elementProps.imageAlt} onChange={handleChange} />
+                <TextField fullWidth label='Image URL' name='imageUrl' value={elementProps.imageUrl} onChange={handleChange} />
+                <TextField fullWidth label='Alt Text' name='imageAlt' value={elementProps.imageAlt} onChange={handleChange} />
               </>
             )}
             {elementType === 'video' && (
               <>
-                <TextField fullWidth label="Video URL" name="videoUrl" value={elementProps.videoUrl} onChange={handleChange} />
-                <TextField fullWidth select SelectProps={{ native: true }} label="Autoplay" name="autoplay" value={elementProps.autoplay} onChange={handleChange}>
+                <TextField fullWidth label='Video URL' name='videoUrl' value={elementProps.videoUrl} onChange={handleChange} />
+                <TextField fullWidth select SelectProps={{ native: true }} label='Autoplay' name='autoplay' value={elementProps.autoplay} onChange={handleChange}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
                 </TextField>
@@ -188,9 +188,9 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
                 <FormControl fullWidth>
                 <InputLabel>Font Family</InputLabel>
                 <Select
-                    name="fontFamily"
+                    name='fontFamily'
                     value={elementProps.fontFamily}
-                    label="Font Family"
+                    label='Font Family'
                     onChange={handleChange}
                 >
                     {fontFamilies.map((option) => (
@@ -202,24 +202,24 @@ const SlideEditor = ({ presentation, setPresentation, currentSlideIndex, updateS
                 </FormControl>
                 <TextField
                   select
-                  label="Language"
+                  label='Language'
                   value={programmingLanguage}
                   onChange={e => setProgrammingLanguage(e.target.value)}
                   fullWidth
                 >
-                <MenuItem value="javascript">JavaScript</MenuItem>
-                <MenuItem value="python">Python</MenuItem>
-                <MenuItem value="c">C</MenuItem>
+                <MenuItem value='javascript'>JavaScript</MenuItem>
+                <MenuItem value='python'>Python</MenuItem>
+                <MenuItem value='c'>C</MenuItem>
                 </TextField>
-                <TextField fullWidth multiline maxRows={10} label="Code" name="content" value={elementProps.content} onChange={handleChange} />
-                <TextField fullWidth type="number" label="Font Size (em)" name="fontSize" value={elementProps.fontSize} onChange={handleChange} />
+                <TextField fullWidth multiline maxRows={10} label='Code' name='content' value={elementProps.content} onChange={handleChange} />
+                <TextField fullWidth type='number' label='Font Size (em)' name='fontSize' value={elementProps.fontSize} onChange={handleChange} />
               </>
             )}
-            <Button onClick={addElement} variant="contained">Add to Slide</Button>
+            <Button onClick={addElement} variant='contained'>Add to Slide</Button>
           </Stack>
         </Container>
       </Modal>
-    </Container>
+    </Box>
   );
 };
 

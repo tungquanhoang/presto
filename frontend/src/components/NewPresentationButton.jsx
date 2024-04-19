@@ -31,19 +31,19 @@ const NewPresentationModal = ({ onPresentationCreate }) => {
         <DialogContent>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
-            label="Presentation Name"
-            type="text"
+            margin='dense'
+            id='name'
+            label='Presentation Name'
+            type='text'
             fullWidth
             value={presentationName}
             onChange={(e) => setPresentationName(e.target.value)}
           />
           <TextField
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
+            margin='dense'
+            id='description'
+            label='Description'
+            type='text'
             fullWidth
             multiline
             value={description}
@@ -51,10 +51,10 @@ const NewPresentationModal = ({ onPresentationCreate }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color='primary'>
             Cancel
           </Button>
-          <Button onClick={handleCreate} color="primary">
+          <Button onClick={handleCreate} color='primary'>
             Create
           </Button>
         </DialogActions>

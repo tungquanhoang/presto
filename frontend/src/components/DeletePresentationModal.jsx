@@ -50,20 +50,20 @@ const DeletePresentationModal = ({ id, openDeleteDialog, setOpenDeleteDialog }) 
     <Dialog
       open={openDeleteDialog}
       onClose={() => setOpenDeleteDialog(false)}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      aria-labelledby='alert-dialog-title'
+      aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id="alert-dialog-title">{'Are you sure you want to delete this presentation?'}</DialogTitle>
+      <DialogTitle id='alert-dialog-title'>{'Are you sure you want to delete this presentation?'}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id='alert-dialog-description'>
           This action cannot be undone. Are you sure you want to continue?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+        <Button onClick={() => setOpenDeleteDialog(false)} color='primary'>
           No
         </Button>
-        <Button onClick={handleDeletePresentation} color="primary" autoFocus>
+        <Button onClick={handleDeletePresentation} color='primary' autoFocus>
           Yes
         </Button>
       </DialogActions>
