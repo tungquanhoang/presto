@@ -134,6 +134,7 @@ const PresentationSlidesPage = () => {
     setLoading(true);
     if (slides.length === 1) {
       alert('Cannot delete the only slide. Please delete the presentation instead.');
+      setLoading(false);
       return;
     }
     const newSlides = slides.filter((_, index) => index !== currentSlideIndex);
