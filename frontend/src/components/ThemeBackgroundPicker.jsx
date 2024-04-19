@@ -3,6 +3,7 @@ import BACKEND_PORT from '../config.json';
 import { Button, Modal, Typography, FormControl, RadioGroup, FormControlLabel, Radio, Box, Grid } from '@material-ui/core';
 import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 
+/* A modal/form to pick the theme/background color for the slide deck */
 const ThemeBackgroundPicker = ({ presentation, setPresentation, currentSlideIndex, updateSlidesInStore, setSlides, setLoading, modalStyle }) => {
   const [open, setOpen] = useState(false);
   const [backgroundType, setBackgroundType] = useState('solid');
@@ -19,6 +20,7 @@ const ThemeBackgroundPicker = ({ presentation, setPresentation, currentSlideInde
     setOpen(false);
   };
 
+  // Save the background color
   const handleSave = () => {
     setLoading(true);
     let newBackgroundValue;
@@ -50,6 +52,7 @@ const ThemeBackgroundPicker = ({ presentation, setPresentation, currentSlideInde
     handleClose();
   };
 
+  // Post a request to change the background color in the database
   const handleUpdatePresentationBackground = async () => {
     const updatedPresentation = presentation;
     const token = localStorage.getItem('token');
@@ -59,7 +62,7 @@ const ThemeBackgroundPicker = ({ presentation, setPresentation, currentSlideInde
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ store: { presentations: [updatedPresentation] } }) // Simplified, update your backend as needed
+      body: JSON.stringify({ store: { presentations: [updatedPresentation] } })
     });
 
     if (response.ok) {

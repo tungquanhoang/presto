@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
+/* Component for the logout button logics */
 const LogoutButton = () => {
   const navigate = useNavigate();
 

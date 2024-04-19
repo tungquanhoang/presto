@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Typography, Container, FormControl, Input, InputLabel, Link } from '@material-ui/core';
 import BACKEND_PORT from '../config.json';
 
+/* The register screen */
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
