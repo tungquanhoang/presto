@@ -36,6 +36,7 @@ const PresentationSlidesPage = () => {
     if (slideNumber) {
       setCurrentSlideIndex(parseInt(slideNumber, 10) - 1);
     }
+    console.log(slides);
   }, []);
 
   // Update URL based on slide number
@@ -123,6 +124,7 @@ const PresentationSlidesPage = () => {
   };
 
   const handleDeleteSlide = async () => {
+    setLoading(true);
     if (slides.length === 1) {
       alert('Cannot delete the only slide. Please delete the presentation instead.');
       return;
@@ -134,6 +136,7 @@ const PresentationSlidesPage = () => {
     } else {
       alert('Failed to delete slide');
     }
+    setLoading(false);
   };
 
   const handleNextSlide = () => {
